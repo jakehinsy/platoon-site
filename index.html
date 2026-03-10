@@ -1,85 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Platoon</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <style>
-    body{
-      font-family: Arial, sans-serif;
-      background:#0f172a;
-      color:white;
-      text-align:center;
-      padding:80px 20px;
-    }
-
-    h1{
-      font-size:48px;
-      margin-bottom:10px;
-    }
-
-    h2{
-      font-weight:400;
-      color:#cbd5f5;
-    }
-
-    .box{
-      margin-top:50px;
-      background:#1e293b;
-      padding:40px;
-      border-radius:10px;
-      max-width:500px;
-      margin-left:auto;
-      margin-right:auto;
-    }
-
-    input{
-      padding:12px;
-      width:70%;
-      border:none;
-      border-radius:6px;
-      margin-right:10px;
-    }
-
-    button{
-      padding:12px 20px;
-      background:#22c55e;
-      border:none;
-      border-radius:6px;
-      color:white;
-      font-weight:bold;
-      cursor:pointer;
-    }
-  </style>
+  <title>Platoon | Shift Trading for Firefighters</title>
+  <meta
+    name="description"
+    content="Platoon helps firefighters post availability, discover matching trades, and manage shift trades with less back-and-forth."
+  >
+  <meta property="og:title" content="Platoon | Shift Trading for Firefighters">
+  <meta
+    property="og:description"
+    content="The modern shift trade platform for firefighters. Post, discover, and manage shift trades more easily with Platoon."
+  >
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
+  <div class="site-shell">
+    <header class="hero">
+      <div class="hero__copy">
+        <p class="eyebrow">Platoon</p>
+        <h1>The modern shift trade platform for firefighters</h1>
+        <p class="hero__lede">
+          Platoon helps firefighters post availability, discover compatible trades, and manage
+          shift swaps with less friction and fewer back-and-forth messages.
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#waitlist">Request Early Access</a>
+          <a class="button button--secondary" href="mailto:support@platoonapp.com">Contact</a>
+        </div>
+      </div>
 
-<h1>Platoon</h1>
-<h2>The modern shift trade platform for firefighters</h2>
+      <section class="waitlist-card" id="waitlist" aria-labelledby="waitlist-heading">
+        <p class="card-label">Early access</p>
+        <h2 id="waitlist-heading">Request access</h2>
+        <p class="card-copy">
+          Join the waitlist to hear when Platoon opens to more firefighters and departments.
+        </p>
 
-<div class="box">
+        <form
+          class="waitlist-form"
+          action="https://formspree.io/f/xkoqjzdq"
+          method="POST"
+          novalidate
+        >
+          <label class="sr-only" for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            inputmode="email"
+            placeholder="Email address"
+            required
+          >
+          <button type="submit" class="button button--primary">Request Early Access</button>
+        </form>
 
-<p>Launching soon.</p>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </section>
+    </header>
 
-<p>Join the early access list.</p>
+    <main>
+      <section class="section" aria-labelledby="how-it-works-heading">
+        <div class="section-heading">
+          <p class="section-label">How it works</p>
+          <h2 id="how-it-works-heading">A simpler workflow for shift trades</h2>
+        </div>
+        <div class="card-grid">
+          <article class="info-card">
+            <h3>Post availability</h3>
+            <p>Share the shifts you need covered or the days you are available in a clear format.</p>
+          </article>
+          <article class="info-card">
+            <h3>Find matching trades</h3>
+            <p>See compatible opportunities faster instead of relying on scattered texts and group chats.</p>
+          </article>
+          <article class="info-card">
+            <h3>Coordinate faster</h3>
+            <p>Keep trade details organized so firefighters can confirm next steps with less confusion.</p>
+          </article>
+        </div>
+      </section>
 
-<form action="https://formspree.io/f/xkoqjzdq" method="POST">
+      <section class="section section--compact" aria-labelledby="built-for-heading">
+        <div class="section-heading">
+          <p class="section-label">Built for fire departments</p>
+          <h2 id="built-for-heading">Practical tools for crews and command staff</h2>
+        </div>
+        <ul class="trust-list">
+          <li>Designed around real shift-trade coordination instead of generic scheduling software.</li>
+          <li>Clear, lightweight workflows that reduce manual follow-up and missed details.</li>
+          <li>A professional experience that departments can adopt without extra operational overhead.</li>
+        </ul>
+      </section>
+    </main>
 
-<input 
-type="email" 
-name="email" 
-placeholder="email address"
-required
->
+    <footer class="footer">
+      <a href="mailto:support@platoonapp.com">support@platoonapp.com</a>
+      <a href="mailto:review@platoonapp.com">review@platoonapp.com</a>
+      <p>&copy; Platoon</p>
+    </footer>
+  </div>
 
-<button type="submit">
-Request Access
-</button>
+  <script>
+    (function () {
+      var form = document.querySelector(".waitlist-form");
+      var status = document.getElementById("form-status");
 
-</form>
+      if (!form || !status) {
+        return;
+      }
 
-</div>
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
 
+        var emailInput = form.elements.email;
+        if (!emailInput || !emailInput.checkValidity()) {
+          status.textContent = "Enter a valid email address.";
+          status.dataset.state = "error";
+          return;
+        }
+
+        status.textContent = "Submitting...";
+        status.dataset.state = "pending";
+
+        fetch(form.action, {
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email: emailInput.value })
+        })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Request failed");
+            }
+
+            form.reset();
+            status.textContent = "Thanks. You are on the early access list.";
+            status.dataset.state = "success";
+          })
+          .catch(function () {
+            status.textContent = "Submission failed. Please try again or email support@platoonapp.com.";
+            status.dataset.state = "error";
+          });
+      });
+    }());
+  </script>
 </body>
 </html>
