@@ -387,6 +387,104 @@ li {
     linear-gradient(180deg, #09111d 0%, #08111d 52%, #040912 100%);
 }
 
+.support-page {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(212, 59, 59, 0.2), transparent 18%),
+    radial-gradient(circle at 86% 10%, rgba(212, 59, 59, 0.14), transparent 16%),
+    linear-gradient(180deg, #09111d 0%, #08111d 52%, #040912 100%);
+}
+
+.support-shell {
+  display: grid;
+  min-height: 100vh;
+  align-items: center;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.support-layout {
+  display: flex;
+  justify-content: center;
+}
+
+.support-card {
+  position: relative;
+  width: min(100%, 640px);
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: rgba(10, 16, 28, 0.9);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.support-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 180, 180, 0.3), rgba(212, 59, 59, 0.06));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.support-card__brand,
+.support-card__content {
+  position: relative;
+  z-index: 1;
+}
+
+.support-card__brand {
+  margin-bottom: 20px;
+}
+
+.support-card h1 {
+  margin-bottom: 14px;
+  font-size: clamp(2.2rem, 5.8vw, 3.2rem);
+  line-height: 0.98;
+}
+
+.support-copy {
+  margin-bottom: 24px;
+  color: var(--muted-strong);
+}
+
+.support-meta {
+  margin: 0 0 24px;
+}
+
+.support-meta strong {
+  color: var(--text);
+}
+
+.support-list {
+  margin: 0 0 24px;
+  padding: 24px 24px 24px 48px;
+  border-radius: var(--radius-lg);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.support-list li::marker {
+  color: #ffd1d1;
+}
+
+.support-list li + li {
+  margin-top: 10px;
+}
+
+.support-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
 .reset-shell {
   display: grid;
   min-height: 100vh;
@@ -569,6 +667,16 @@ button:disabled {
 }
 
 @media (max-width: 759px) {
+  .support-card {
+    padding: 24px 20px;
+    border-radius: 24px;
+  }
+
+  .support-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .reset-card {
     padding: 24px 20px;
     border-radius: 24px;

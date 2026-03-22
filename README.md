@@ -2,6 +2,13 @@
 
 Static marketing site and password reset bridge for Platoon.
 
+## Public Routes
+
+The site currently exposes these public static routes:
+- `/`
+- `/reset-password/`
+- `/support/`
+
 ## Password Reset Bridge
 
 The site exposes a dedicated recovery completion page at `/reset-password/`.
@@ -33,4 +40,4 @@ await supabase.auth.resetPasswordForEmail(email, {
 
 ## Deployment Notes
 
-No server changes are required. On Vercel, the route works as a static directory route because the page lives at `reset-password/index.html`.
+No server changes are required. On Vercel, each route works as a static directory route because the page lives in a matching folder such as `reset-password/index.html` or `support/index.html`.
