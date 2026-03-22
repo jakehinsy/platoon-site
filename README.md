@@ -8,6 +8,8 @@ The site currently exposes these public static routes:
 - `/`
 - `/reset-password/`
 - `/support/`
+- `/privacy/`
+- `/delete-account/`
 
 ## Password Reset Bridge
 
@@ -40,4 +42,4 @@ await supabase.auth.resetPasswordForEmail(email, {
 
 ## Deployment Notes
 
-No server changes are required. On Vercel, each route works as a static directory route because the page lives in a matching folder such as `reset-password/index.html` or `support/index.html`.
+No server changes are required. On Vercel, each route works as a static directory route because the page lives in a matching folder such as `reset-password/index.html`, `support/index.html`, `privacy/index.html`, or `delete-account/index.html`.
