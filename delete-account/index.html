@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Platoon Account Deletion</title>
+  <title>Delete Your Platoon Account</title>
   <meta
     name="description"
-    content="Request deletion of your Platoon account and associated data."
+    content="Securely verify and permanently delete your Platoon account from the web."
   >
-  <meta property="og:title" content="Platoon Account Deletion">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="platoon-supabase-url" content="https://baugcxlhxcyszqoetxfq.supabase.co">
+  <meta name="platoon-supabase-anon-key" content="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhdWdjeGxoeGN5c3pxb2V0eGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzOTcxODQsImV4cCI6MjA4Nzk3MzE4NH0.7h44qNc1c39jaJlUnwi4i_zuqxbcAG3_pwh6rD_8gC8">
+  <meta name="platoon-delete-account-endpoint" content="https://baugcxlhxcyszqoetxfq.supabase.co/functions/v1/delete-account">
+  <meta property="og:title" content="Delete Your Platoon Account">
   <meta
     property="og:description"
-    content="Learn how to request deletion of your Platoon account and associated data."
+    content="Verify your email, confirm deletion, and permanently remove your Platoon account."
   >
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +30,7 @@
 <body class="support-page">
   <div class="site-shell support-shell">
     <main class="support-layout">
-      <section class="support-card" aria-labelledby="delete-account-title">
+      <section class="support-card delete-card" aria-labelledby="delete-account-title">
         <div class="support-card__brand">
           <img
             class="brand-lockup__logo"
@@ -35,48 +39,148 @@
             width="220"
             height="72"
           >
-          <p class="eyebrow">Public account help</p>
+          <p class="eyebrow">Secure account deletion</p>
         </div>
 
+        <div class="status-pill" id="delete-status-pill" data-tone="neutral">Request verification</div>
+
         <div class="support-card__content">
-          <h1 id="delete-account-title">Platoon Account Deletion</h1>
-          <p class="support-copy">
-            To request deletion of your Platoon account and associated data, email
-            <a class="text-link" href="mailto:support@platoonapp.com?subject=Delete%20My%20Account">support@platoonapp.com</a>.
-          </p>
+          <div class="delete-state" id="delete-request-state">
+            <h1 id="delete-account-title">Delete your Platoon account</h1>
+            <p class="support-copy">
+              This self-service flow verifies your email address before your Platoon account is permanently deleted.
+            </p>
 
-          <div class="policy-sections">
-            <section class="policy-section" aria-labelledby="how-to-request">
-              <h2 id="how-to-request">How to request deletion</h2>
-              <p>
-                Send an email to support@platoonapp.com with the subject line "Delete My Account" and include the email address associated with your Platoon account.
-              </p>
-            </section>
+            <div class="policy-sections delete-policy-grid">
+              <section class="policy-section" aria-labelledby="delete-permanent">
+                <h2 id="delete-permanent">Deletion is permanent</h2>
+                <p>
+                  Once confirmed, your Platoon account cannot be restored and you will lose access to the app.
+                </p>
+              </section>
 
-            <section class="policy-section" aria-labelledby="what-will-be-deleted">
-              <h2 id="what-will-be-deleted">What will be deleted</h2>
-              <p>
-                When your deletion request is processed, we will remove your profile and account information, messages, trade activity and listings, and schedule-related user data associated with your account.
-              </p>
-            </section>
+              <section class="policy-section" aria-labelledby="delete-data-removed">
+                <h2 id="delete-data-removed">What we delete</h2>
+                <p>
+                  We delete or anonymize your account profile, authentication record, messages, schedule-related user data, trade listings, and other account-linked activity associated only with you.
+                </p>
+              </section>
 
-            <section class="policy-section" aria-labelledby="retention">
-              <h2 id="retention">Retention</h2>
-              <p>
-                Deletion requests are processed within 7 days. Limited security and audit logs may be retained for up to 30 days before deletion.
+              <section class="policy-section" aria-labelledby="delete-data-retained">
+                <h2 id="delete-data-retained">What may be retained temporarily</h2>
+                <p>
+                  Limited security, audit, and fraud-prevention logs may be retained for up to 30 days, or longer if required for legal compliance or abuse investigations.
+                </p>
+              </section>
+            </div>
+
+            <form id="delete-request-form" class="reset-form" novalidate>
+              <div class="field-group">
+                <label for="delete-email">Account email</label>
+                <input
+                  id="delete-email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  inputmode="email"
+                  required
+                >
+              </div>
+
+              <p class="inline-note">
+                We will email a one-time verification link. Shared trade records needed by other users may be retained in anonymized form.
               </p>
-              <p>
-                Some records may be retained longer if required for legal, security, or fraud-prevention purposes.
-              </p>
-            </section>
+              <p class="form-status" id="delete-request-status" role="status" aria-live="polite"></p>
+
+              <div class="reset-actions">
+                <button type="submit" class="button button--primary" id="delete-request-button">
+                  Send Verification Link
+                </button>
+                <a class="button button--secondary" href="/">Back to homepage</a>
+              </div>
+            </form>
           </div>
 
-          <div class="support-actions">
-            <a class="button button--secondary" href="/">Back to homepage</a>
+          <div class="delete-state" id="delete-email-sent-state" hidden>
+            <h1>Check your email</h1>
+            <p class="support-copy">
+              We sent a one-time Platoon account deletion link to <strong id="delete-email-sent-value"></strong> if that address belongs to an account.
+            </p>
+            <p class="inline-note">
+              Open the link on this device to verify the request and continue to the final confirmation step.
+            </p>
+            <div class="support-actions">
+              <button type="button" class="button button--secondary" id="edit-email-button">Use a different email</button>
+              <a class="text-link" href="/support">Need help?</a>
+            </div>
+          </div>
+
+          <div class="delete-state" id="delete-validating-state" hidden>
+            <h1>Validating your deletion link</h1>
+            <p class="support-copy">
+              We are confirming your one-time link and preparing the final deletion step.
+            </p>
+            <div class="progress-indicator" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p class="inline-note">This should only take a few seconds.</p>
+          </div>
+
+          <div class="delete-state" id="delete-confirm-state" hidden>
+            <h1>Confirm permanent deletion</h1>
+            <p class="support-copy">
+              You are signed in as <strong id="delete-confirm-email"></strong>. This will permanently delete your Platoon account.
+            </p>
+
+            <div class="confirmation-box" role="note" aria-label="Deletion summary">
+              <p><strong>Deleted now:</strong> your account profile, login access, messages, personal schedule data, and account-owned trade activity.</p>
+              <p><strong>Retained temporarily if needed:</strong> limited audit, security, and fraud-prevention records, plus any shared trade history that must remain available to other users in anonymized form.</p>
+            </div>
+
+            <form id="delete-confirm-form" class="reset-form" novalidate>
+              <label class="checkbox-row" for="delete-confirm-checkbox">
+                <input id="delete-confirm-checkbox" name="acknowledged" type="checkbox" required>
+                <span>I understand this action is permanent and cannot be undone.</span>
+              </label>
+
+              <p class="form-status" id="delete-confirm-status" role="status" aria-live="polite"></p>
+
+              <div class="reset-actions">
+                <button type="submit" class="button button--primary button--danger" id="delete-confirm-button">
+                  Permanently Delete Account
+                </button>
+                <a class="button button--secondary" href="/">Cancel</a>
+              </div>
+            </form>
+          </div>
+
+          <div class="delete-state" id="delete-success-state" hidden>
+            <h1>Your Platoon account has been deleted.</h1>
+            <p class="support-copy">
+              The deletion request is complete. You can close this page, and any remaining temporary retention will age out automatically under Platoon policy.
+            </p>
+            <div class="support-actions">
+              <a class="button button--secondary" href="/">Back to homepage</a>
+            </div>
+          </div>
+
+          <div class="delete-state" id="delete-error-state" hidden>
+            <h1>Deletion link unavailable</h1>
+            <p class="support-copy" id="delete-error-message">
+              This account deletion link is invalid or has expired. Request a new verification email and try again.
+            </p>
+            <div class="support-actions">
+              <button type="button" class="button button--secondary" id="restart-delete-button">Start over</button>
+              <a class="text-link" href="/support">Contact support</a>
+            </div>
           </div>
         </div>
       </section>
     </main>
   </div>
+
+  <script type="module" src="/assets/js/delete-account.js"></script>
 </body>
 </html>
