@@ -30,6 +30,12 @@ const editEmailButton = document.getElementById("edit-email-button");
 const config = getConfig();
 let isDeleteReady = false;
 let sessionRestorePromise = null;
+let latestAuthState = {
+  session: null,
+  tokenSource: "none",
+  accessToken: "",
+  expiresAt: null
+};
 
 console.info("[delete-account] page init", {
   deleteUrlPresent: Boolean(config && config.deleteEndpoint),
@@ -118,32 +124,43 @@ async function restoreDeletionSession(supabase, tokens) {
   console.info("[delete-account] token/session restore start");
 
   try {
+    const restoreMethod = getRestoreMethod(tokens);
     await withTimeout(initializeSupabaseSession(supabase, tokens), EMAIL_TIMEOUT_MS);
 
-    const sessionResult = await supabase.auth.getSession();
+    const restoredState = await getCurrentAuthState(supabase, restoreMethod + "_restored");
     console.info("[delete-account] token/session restore getSession result", {
-      hasSession: Boolean(sessionResult && sessionResult.data && sessionResult.data.session),
-      hasAccessToken: Boolean(
-        sessionResult &&
-        sessionResult.data &&
-        sessionResult.data.session &&
-        sessionResult.data.session.access_token
-      ),
-      error: sessionResult.error ? sessionResult.error.message : null
+      hasSession: Boolean(restoredState.session),
+      hasAccessToken: Boolean(restoredState.accessToken),
+      expiresAt: restoredState.expiresAt,
+      tokenSource: restoredState.tokenSource,
+      error: restoredState.errorMessage
     });
 
-    if (sessionResult.error || !sessionResult.data.session) {
-      throw sessionResult.error || new Error("missing_delete_session");
+    if (restoredState.error || !restoredState.session) {
+      throw restoredState.error || new Error("missing_delete_session");
     }
 
-    const userEmail = sessionResult.data.session.user && sessionResult.data.session.user.email
-      ? sessionResult.data.session.user.email
+    console.info("[delete-account] refreshSession attempted", {
+      priorTokenSource: restoredState.tokenSource,
+      expiresAt: restoredState.expiresAt
+    });
+
+    const refreshedState = await refreshDeletionSession(supabase, restoredState);
+    const activeState = refreshedState.session ? refreshedState : restoredState;
+
+    if (!activeState.session) {
+      throw new Error("missing_delete_session");
+    }
+
+    const userEmail = activeState.session.user && activeState.session.user.email
+      ? activeState.session.user.email
       : getStoredEmail();
 
     if (!userEmail) {
       throw new Error("missing_delete_email");
     }
 
+    latestAuthState = activeState;
     storeEmail(userEmail);
     confirmEmail.textContent = userEmail;
     clearSensitiveUrl();
@@ -153,11 +170,14 @@ async function restoreDeletionSession(supabase, tokens) {
     console.info("[delete-account] token/session restore success", {
       email: userEmail,
       hasSession: true,
-      hasAccessToken: true,
+      hasAccessToken: Boolean(activeState.accessToken),
+      expiresAt: activeState.expiresAt,
+      tokenSource: activeState.tokenSource,
       deleteUrlPresent: Boolean(config.deleteEndpoint)
     });
   } catch (error) {
     setDeleteReady(false);
+    latestAuthState = createEmptyAuthState();
     console.error("[delete-account] token/session restore failure", error);
     throw error;
   }
@@ -243,24 +263,34 @@ async function handleDeletionConfirmation(supabase) {
     setStatus("pending", "Deleting account");
     setFormStatus(confirmStatus, "Deleting your account...", "pending");
 
-    const sessionResult = await supabase.auth.getSession();
-    const session = sessionResult.data ? sessionResult.data.session : null;
-    const accessToken = session ? session.access_token : "";
-
-    console.info("[delete-account] session check before delete POST", {
-      hasSession: Boolean(session),
-      hasAccessToken: Boolean(accessToken),
-      deleteUrlPresent: Boolean(config.deleteEndpoint),
-      error: sessionResult.error ? sessionResult.error.message : null
+    console.info("[delete-account] refreshSession attempted before delete", {
+      previousTokenSource: latestAuthState.tokenSource,
+      previousExpiresAt: latestAuthState.expiresAt
     });
 
-    if (sessionResult.error || !session) {
+    const refreshedState = await refreshDeletionSession(supabase, latestAuthState);
+    const currentState = refreshedState.session
+      ? refreshedState
+      : await getCurrentAuthState(supabase, latestAuthState.tokenSource || "restored_session");
+
+    latestAuthState = currentState;
+
+    console.info("[delete-account] session check before delete POST", {
+      hasSession: Boolean(currentState.session),
+      hasAccessToken: Boolean(currentState.accessToken),
+      deleteUrlPresent: Boolean(config.deleteEndpoint),
+      expiresAt: currentState.expiresAt,
+      tokenSource: currentState.tokenSource,
+      error: currentState.errorMessage
+    });
+
+    if (currentState.error || !currentState.session) {
       const missingSessionError = new Error("missing_delete_session");
       missingSessionError.code = "missing_session";
       throw missingSessionError;
     }
 
-    if (!accessToken) {
+    if (!currentState.accessToken) {
       const missingTokenError = new Error("missing_delete_access_token");
       missingTokenError.code = "missing_access_token";
       throw missingTokenError;
@@ -269,7 +299,9 @@ async function handleDeletionConfirmation(supabase) {
     console.info("[delete-account] about to send delete POST", {
       url: config.deleteEndpoint,
       email: getStoredEmail(),
-      hasAccessToken: true
+      hasAccessToken: true,
+      tokenSource: currentState.tokenSource,
+      expiresAt: currentState.expiresAt
     });
 
     const deletionResponse = await withTimeout(
@@ -277,7 +309,7 @@ async function handleDeletionConfirmation(supabase) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + accessToken,
+          Authorization: "Bearer " + currentState.accessToken,
           apikey: config.anonKey
         },
         body: JSON.stringify({
@@ -292,7 +324,8 @@ async function handleDeletionConfirmation(supabase) {
       status: deletionResponse.status,
       ok: deletionResponse.ok,
       redirected: deletionResponse.redirected,
-      type: deletionResponse.type
+      type: deletionResponse.type,
+      tokenSource: currentState.tokenSource
     });
 
     const responseBody = await readResponseBody(deletionResponse);
@@ -300,7 +333,9 @@ async function handleDeletionConfirmation(supabase) {
       console.error("[delete-account] delete POST non-2xx response", {
         status: deletionResponse.status,
         bodyText: responseBody.text,
-        bodyJson: responseBody.json
+        bodyJson: responseBody.json,
+        tokenSource: currentState.tokenSource,
+        expiresAt: currentState.expiresAt
       });
 
       const apiError = new Error(getApiErrorMessage(responseBody.json, responseBody.text));
@@ -313,10 +348,13 @@ async function handleDeletionConfirmation(supabase) {
     console.info("[delete-account] delete POST succeeded", {
       status: deletionResponse.status,
       bodyText: responseBody.text,
-      bodyJson: responseBody.json
+      bodyJson: responseBody.json,
+      tokenSource: currentState.tokenSource,
+      expiresAt: currentState.expiresAt
     });
 
     await supabase.auth.signOut();
+    latestAuthState = createEmptyAuthState();
     window.sessionStorage.removeItem(REQUEST_STATE_KEY);
     setFormStatus(confirmStatus, "", "");
     showState("success");
@@ -327,6 +365,8 @@ async function handleDeletionConfirmation(supabase) {
       status: error && error.status ? error.status : null,
       message: error && error.message ? error.message : String(error),
       responseBody: error && error.responseBody ? error.responseBody : null,
+      tokenSource: latestAuthState.tokenSource,
+      expiresAt: latestAuthState.expiresAt,
       error: error
     });
     setStatus("neutral", "Ready to confirm");
@@ -339,20 +379,6 @@ async function handleDeletionConfirmation(supabase) {
 }
 
 async function initializeSupabaseSession(supabase, tokens) {
-  if (tokens.accessToken && tokens.refreshToken) {
-    console.info("[delete-account] restoring session via access + refresh token");
-    const sessionResult = await supabase.auth.setSession({
-      access_token: tokens.accessToken,
-      refresh_token: tokens.refreshToken
-    });
-
-    if (sessionResult.error) {
-      throw sessionResult.error;
-    }
-
-    return;
-  }
-
   if (tokens.code) {
     console.info("[delete-account] restoring session via auth code exchange");
     const exchangeResult = await supabase.auth.exchangeCodeForSession(tokens.code);
@@ -372,6 +398,20 @@ async function initializeSupabaseSession(supabase, tokens) {
 
     if (verifyResult.error) {
       throw verifyResult.error;
+    }
+
+    return;
+  }
+
+  if (tokens.accessToken && tokens.refreshToken) {
+    console.info("[delete-account] restoring session via access + refresh token");
+    const sessionResult = await supabase.auth.setSession({
+      access_token: tokens.accessToken,
+      refresh_token: tokens.refreshToken
+    });
+
+    if (sessionResult.error) {
+      throw sessionResult.error;
     }
 
     return;
@@ -397,6 +437,78 @@ async function initializeSupabaseSession(supabase, tokens) {
   }
 
   throw new Error("missing_delete_token");
+}
+
+async function refreshDeletionSession(supabase, fallbackState) {
+  try {
+    const refreshResult = await withTimeout(supabase.auth.refreshSession(), EMAIL_TIMEOUT_MS);
+    const refreshedSession = refreshResult.data ? refreshResult.data.session : null;
+
+    console.info("[delete-account] refreshSession succeeded", {
+      hasSession: Boolean(refreshedSession),
+      hasAccessToken: Boolean(refreshedSession && refreshedSession.access_token),
+      expiresAt: getSessionExpiry(refreshedSession),
+      error: refreshResult.error ? refreshResult.error.message : null
+    });
+
+    if (refreshResult.error) {
+      throw refreshResult.error;
+    }
+
+    return buildAuthState(refreshedSession, "refreshed_session", null);
+  } catch (error) {
+    console.error("[delete-account] refreshSession failed", error);
+    return fallbackState || createEmptyAuthState(error);
+  }
+}
+
+async function getCurrentAuthState(supabase, tokenSource) {
+  const sessionResult = await supabase.auth.getSession();
+  const session = sessionResult.data ? sessionResult.data.session : null;
+  return buildAuthState(session, tokenSource || "getSession", sessionResult.error || null);
+}
+
+function buildAuthState(session, tokenSource, error) {
+  return {
+    session: session || null,
+    tokenSource: tokenSource || "none",
+    accessToken: session && session.access_token ? session.access_token : "",
+    expiresAt: getSessionExpiry(session),
+    error: error || null,
+    errorMessage: error && error.message ? error.message : null
+  };
+}
+
+function createEmptyAuthState(error) {
+  return buildAuthState(null, "none", error || null);
+}
+
+function getSessionExpiry(session) {
+  if (!session || !session.expires_at) {
+    return null;
+  }
+
+  return new Date(session.expires_at * 1000).toISOString();
+}
+
+function getRestoreMethod(tokens) {
+  if (tokens.code) {
+    return "exchange_code_for_session";
+  }
+
+  if (tokens.tokenHash) {
+    return "verify_otp_token_hash";
+  }
+
+  if (tokens.accessToken && tokens.refreshToken) {
+    return "set_session";
+  }
+
+  if (tokens.token) {
+    return "verify_otp_token";
+  }
+
+  return "unknown";
 }
 
 function getConfig() {
@@ -535,6 +647,7 @@ function restoreRequestedEmail() {
 function resetToRequestState() {
   clearSensitiveUrl();
   sessionRestorePromise = null;
+  latestAuthState = createEmptyAuthState();
   setDeleteReady(false);
   confirmForm.reset();
   setFormStatus(requestStatus, "", "");
