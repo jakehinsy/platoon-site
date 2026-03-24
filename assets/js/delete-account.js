@@ -4,6 +4,8 @@ const EMAIL_TIMEOUT_MS = 12000;
 const DELETE_TIMEOUT_MS = 20000;
 const REQUEST_STATE_KEY = "platoon-delete-account-email";
 const DELETE_REDIRECT_PATH = "/delete-account";
+const APP_DEEP_LINK = "platoon://account-deleted";
+const APP_REDIRECT_DELAY_MS = 1200;
 
 const stateElements = {
   request: document.getElementById("delete-request-state"),
@@ -26,6 +28,7 @@ const emailSentValue = document.getElementById("delete-email-sent-value");
 const errorMessage = document.getElementById("delete-error-message");
 const restartButton = document.getElementById("restart-delete-button");
 const editEmailButton = document.getElementById("edit-email-button");
+const openAppButton = document.getElementById("open-app-button");
 
 const config = getConfig();
 let isDeleteReady = false;
@@ -93,6 +96,13 @@ async function initializeDeleteFlow() {
     event.preventDefault();
     resetToRequestState();
   });
+
+  if (openAppButton) {
+    openAppButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      redirectToApp();
+    });
+  }
 
   restoreRequestedEmail();
 
@@ -359,6 +369,7 @@ async function handleDeletionConfirmation(supabase) {
     setFormStatus(confirmStatus, "", "");
     showState("success");
     setStatus("success", "Account deleted");
+    scheduleAppRedirect();
   } catch (error) {
     console.error("[delete-account] delete confirmation catch", {
       code: error && error.code ? error.code : null,
@@ -537,6 +548,16 @@ function getMetaContent(name) {
 
 function getDeleteRedirectUrl() {
   return window.location.origin + DELETE_REDIRECT_PATH;
+}
+
+function scheduleAppRedirect() {
+  window.setTimeout(function () {
+    redirectToApp();
+  }, APP_REDIRECT_DELAY_MS);
+}
+
+function redirectToApp() {
+  window.location.assign(APP_DEEP_LINK);
 }
 
 function extractAuthTokens(urlString) {
@@ -772,3 +793,4 @@ function formatDeleteError(error) {
     ? error.message
     : "We could not complete account deletion. Try again or contact support if this keeps happening.";
 }
+
