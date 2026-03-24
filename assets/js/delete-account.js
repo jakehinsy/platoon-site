@@ -28,13 +28,26 @@ const restartButton = document.getElementById("restart-delete-button");
 const editEmailButton = document.getElementById("edit-email-button");
 
 const config = getConfig();
+let isDeleteReady = false;
+let sessionRestorePromise = null;
+
+console.info("[delete-account] page init", {
+  deleteUrlPresent: Boolean(config && config.deleteEndpoint),
+  supabaseUrlPresent: Boolean(config && config.url)
+});
 
 if (!config) {
+  console.error("[delete-account] missing config", {
+    hasSupabaseUrl: Boolean(getMetaContent("platoon-supabase-url")),
+    hasAnonKey: Boolean(getMetaContent("platoon-supabase-anon-key")),
+    hasDeleteEndpoint: Boolean(getMetaContent("platoon-delete-account-endpoint"))
+  });
   showError(
     "Account deletion is not configured on this site yet. Add the Supabase project URL, publishable anon key, and delete endpoint before using this page."
   );
 } else {
   initializeDeleteFlow().catch(function (error) {
+    console.error("[delete-account] init failed", error);
     showError(formatLinkError(error));
   });
 }
@@ -48,51 +61,106 @@ async function initializeDeleteFlow() {
     }
   });
 
+  setDeleteReady(false);
+
   requestForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    handleVerificationRequest(supabase);
+    void handleVerificationRequest(supabase);
   });
 
   confirmForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    handleDeletionConfirmation(supabase);
+    console.info("[delete-account] confirm form submit prevented");
   });
 
-  restartButton.addEventListener("click", resetToRequestState);
-  editEmailButton.addEventListener("click", resetToRequestState);
+  confirmButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    void handleDeletionConfirmation(supabase);
+  });
+
+  restartButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    resetToRequestState();
+  });
+
+  editEmailButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    resetToRequestState();
+  });
 
   restoreRequestedEmail();
 
   const tokens = extractAuthTokens(window.location.href);
+  console.info("[delete-account] token inspection", {
+    hasAnyToken: tokens.hasAnyToken,
+    hasAccessToken: Boolean(tokens.accessToken),
+    hasRefreshToken: Boolean(tokens.refreshToken),
+    hasCode: Boolean(tokens.code),
+    hasTokenHash: Boolean(tokens.tokenHash),
+    hasToken: Boolean(tokens.token)
+  });
+
   if (!tokens.hasAnyToken) {
     setStatus("neutral", "Request verification");
     showState("request");
+    console.info("[delete-account] no verification tokens found; staying on request state");
     return;
   }
 
   setStatus("pending", "Validating link");
   showState("validating");
 
-  await withTimeout(initializeSupabaseSession(supabase, tokens), EMAIL_TIMEOUT_MS);
+  sessionRestorePromise = restoreDeletionSession(supabase, tokens);
+  await sessionRestorePromise;
+}
 
-  const sessionResult = await supabase.auth.getSession();
-  if (sessionResult.error || !sessionResult.data.session) {
-    throw sessionResult.error || new Error("missing_delete_session");
+async function restoreDeletionSession(supabase, tokens) {
+  console.info("[delete-account] token/session restore start");
+
+  try {
+    await withTimeout(initializeSupabaseSession(supabase, tokens), EMAIL_TIMEOUT_MS);
+
+    const sessionResult = await supabase.auth.getSession();
+    console.info("[delete-account] token/session restore getSession result", {
+      hasSession: Boolean(sessionResult && sessionResult.data && sessionResult.data.session),
+      hasAccessToken: Boolean(
+        sessionResult &&
+        sessionResult.data &&
+        sessionResult.data.session &&
+        sessionResult.data.session.access_token
+      ),
+      error: sessionResult.error ? sessionResult.error.message : null
+    });
+
+    if (sessionResult.error || !sessionResult.data.session) {
+      throw sessionResult.error || new Error("missing_delete_session");
+    }
+
+    const userEmail = sessionResult.data.session.user && sessionResult.data.session.user.email
+      ? sessionResult.data.session.user.email
+      : getStoredEmail();
+
+    if (!userEmail) {
+      throw new Error("missing_delete_email");
+    }
+
+    storeEmail(userEmail);
+    confirmEmail.textContent = userEmail;
+    clearSensitiveUrl();
+    showState("confirm");
+    setStatus("neutral", "Ready to confirm");
+    setDeleteReady(true);
+    console.info("[delete-account] token/session restore success", {
+      email: userEmail,
+      hasSession: true,
+      hasAccessToken: true,
+      deleteUrlPresent: Boolean(config.deleteEndpoint)
+    });
+  } catch (error) {
+    setDeleteReady(false);
+    console.error("[delete-account] token/session restore failure", error);
+    throw error;
   }
-
-  const userEmail = sessionResult.data.session.user && sessionResult.data.session.user.email
-    ? sessionResult.data.session.user.email
-    : getStoredEmail();
-
-  if (!userEmail) {
-    throw new Error("missing_delete_email");
-  }
-
-  storeEmail(userEmail);
-  confirmEmail.textContent = userEmail;
-  clearSensitiveUrl();
-  showState("confirm");
-  setStatus("neutral", "Ready to confirm");
 }
 
 async function handleVerificationRequest(supabase) {
@@ -130,6 +198,7 @@ async function handleVerificationRequest(supabase) {
     showState("emailSent");
     setStatus("success", "Email sent");
   } catch (error) {
+    console.error("[delete-account] verification email request failed", error);
     setStatus("neutral", "Request verification");
     setFormStatus(requestStatus, formatRequestError(error), "error");
   } finally {
@@ -138,6 +207,30 @@ async function handleVerificationRequest(supabase) {
 }
 
 async function handleDeletionConfirmation(supabase) {
+  console.info("[delete-account] delete confirmation click", {
+    isDeleteReady,
+    hasSessionRestorePromise: Boolean(sessionRestorePromise),
+    deleteUrlPresent: Boolean(config && config.deleteEndpoint)
+  });
+
+  if (sessionRestorePromise) {
+    console.info("[delete-account] awaiting session restoration before delete");
+
+    try {
+      await sessionRestorePromise;
+    } catch (error) {
+      console.error("[delete-account] session restoration unavailable during delete", error);
+      setFormStatus(confirmStatus, formatLinkError(error), "error");
+      return;
+    }
+  }
+
+  if (!isDeleteReady) {
+    console.warn("[delete-account] delete blocked because session is not ready");
+    setFormStatus(confirmStatus, "Please reopen the verification link and try again.", "error");
+    return;
+  }
+
   const acknowledged = confirmForm.elements.acknowledged.checked;
 
   if (!acknowledged) {
@@ -151,11 +244,34 @@ async function handleDeletionConfirmation(supabase) {
     setFormStatus(confirmStatus, "Deleting your account...", "pending");
 
     const sessionResult = await supabase.auth.getSession();
-    if (sessionResult.error || !sessionResult.data.session) {
-      throw sessionResult.error || new Error("missing_delete_session");
+    const session = sessionResult.data ? sessionResult.data.session : null;
+    const accessToken = session ? session.access_token : "";
+
+    console.info("[delete-account] session check before delete POST", {
+      hasSession: Boolean(session),
+      hasAccessToken: Boolean(accessToken),
+      deleteUrlPresent: Boolean(config.deleteEndpoint),
+      error: sessionResult.error ? sessionResult.error.message : null
+    });
+
+    if (sessionResult.error || !session) {
+      const missingSessionError = new Error("missing_delete_session");
+      missingSessionError.code = "missing_session";
+      throw missingSessionError;
     }
 
-    const accessToken = sessionResult.data.session.access_token;
+    if (!accessToken) {
+      const missingTokenError = new Error("missing_delete_access_token");
+      missingTokenError.code = "missing_access_token";
+      throw missingTokenError;
+    }
+
+    console.info("[delete-account] about to send delete POST", {
+      url: config.deleteEndpoint,
+      email: getStoredEmail(),
+      hasAccessToken: true
+    });
+
     const deletionResponse = await withTimeout(
       fetch(config.deleteEndpoint, {
         method: "POST",
@@ -166,15 +282,39 @@ async function handleDeletionConfirmation(supabase) {
         },
         body: JSON.stringify({
           email: getStoredEmail()
-        })
+        }),
+        keepalive: false
       }),
       DELETE_TIMEOUT_MS
     );
 
-    const responseBody = await readJsonSafely(deletionResponse);
+    console.info("[delete-account] delete POST fetch returned", {
+      status: deletionResponse.status,
+      ok: deletionResponse.ok,
+      redirected: deletionResponse.redirected,
+      type: deletionResponse.type
+    });
+
+    const responseBody = await readResponseBody(deletionResponse);
     if (!deletionResponse.ok) {
-      throw new Error(getApiErrorMessage(responseBody));
+      console.error("[delete-account] delete POST non-2xx response", {
+        status: deletionResponse.status,
+        bodyText: responseBody.text,
+        bodyJson: responseBody.json
+      });
+
+      const apiError = new Error(getApiErrorMessage(responseBody.json, responseBody.text));
+      apiError.code = "delete_non_2xx";
+      apiError.status = deletionResponse.status;
+      apiError.responseBody = responseBody;
+      throw apiError;
     }
+
+    console.info("[delete-account] delete POST succeeded", {
+      status: deletionResponse.status,
+      bodyText: responseBody.text,
+      bodyJson: responseBody.json
+    });
 
     await supabase.auth.signOut();
     window.sessionStorage.removeItem(REQUEST_STATE_KEY);
@@ -182,15 +322,25 @@ async function handleDeletionConfirmation(supabase) {
     showState("success");
     setStatus("success", "Account deleted");
   } catch (error) {
+    console.error("[delete-account] delete confirmation catch", {
+      code: error && error.code ? error.code : null,
+      status: error && error.status ? error.status : null,
+      message: error && error.message ? error.message : String(error),
+      responseBody: error && error.responseBody ? error.responseBody : null,
+      error: error
+    });
     setStatus("neutral", "Ready to confirm");
     setFormStatus(confirmStatus, formatDeleteError(error), "error");
   } finally {
-    confirmButton.disabled = false;
+    if (isDeleteReady) {
+      confirmButton.disabled = false;
+    }
   }
 }
 
 async function initializeSupabaseSession(supabase, tokens) {
   if (tokens.accessToken && tokens.refreshToken) {
+    console.info("[delete-account] restoring session via access + refresh token");
     const sessionResult = await supabase.auth.setSession({
       access_token: tokens.accessToken,
       refresh_token: tokens.refreshToken
@@ -204,6 +354,7 @@ async function initializeSupabaseSession(supabase, tokens) {
   }
 
   if (tokens.code) {
+    console.info("[delete-account] restoring session via auth code exchange");
     const exchangeResult = await supabase.auth.exchangeCodeForSession(tokens.code);
     if (exchangeResult.error) {
       throw exchangeResult.error;
@@ -213,6 +364,7 @@ async function initializeSupabaseSession(supabase, tokens) {
   }
 
   if (tokens.tokenHash) {
+    console.info("[delete-account] restoring session via token hash verifyOtp");
     const verifyResult = await supabase.auth.verifyOtp({
       token_hash: tokens.tokenHash,
       type: tokens.type
@@ -226,6 +378,7 @@ async function initializeSupabaseSession(supabase, tokens) {
   }
 
   if (tokens.token) {
+    console.info("[delete-account] restoring session via token verifyOtp");
     const verifyOptions = {
       token: tokens.token,
       type: tokens.type
@@ -345,6 +498,11 @@ function setStatus(tone, text) {
   statusPill.textContent = text;
 }
 
+function setDeleteReady(ready) {
+  isDeleteReady = ready;
+  confirmButton.disabled = !ready;
+}
+
 function setFormStatus(element, message, state) {
   element.textContent = message;
 
@@ -376,6 +534,8 @@ function restoreRequestedEmail() {
 
 function resetToRequestState() {
   clearSensitiveUrl();
+  sessionRestorePromise = null;
+  setDeleteReady(false);
   confirmForm.reset();
   setFormStatus(requestStatus, "", "");
   setFormStatus(confirmStatus, "", "");
@@ -395,21 +555,32 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-async function readJsonSafely(response) {
-  try {
-    return await response.json();
-  } catch (_) {
-    return null;
+async function readResponseBody(response) {
+  const text = await response.text();
+  let json = null;
+
+  if (text) {
+    try {
+      json = JSON.parse(text);
+    } catch (_) {
+      json = null;
+    }
   }
+
+  return { text, json };
 }
 
-function getApiErrorMessage(responseBody) {
-  if (responseBody && typeof responseBody.error === "string" && responseBody.error) {
-    return responseBody.error;
+function getApiErrorMessage(responseJson, responseText) {
+  if (responseJson && typeof responseJson.error === "string" && responseJson.error) {
+    return responseJson.error;
   }
 
-  if (responseBody && typeof responseBody.message === "string" && responseBody.message) {
-    return responseBody.message;
+  if (responseJson && typeof responseJson.message === "string" && responseJson.message) {
+    return responseJson.message;
+  }
+
+  if (responseText) {
+    return responseText;
   }
 
   return "The server could not complete account deletion.";
@@ -465,6 +636,13 @@ function formatLinkError(error) {
 function formatDeleteError(error) {
   const message = error && error.message ? error.message.toLowerCase() : "";
 
+  if (
+    message.indexOf("missing_delete_session") !== -1 ||
+    message.indexOf("missing_delete_access_token") !== -1
+  ) {
+    return "Your verification session expired. Reopen the deletion link and try again.";
+  }
+
   if (message.indexOf("timeout") !== -1) {
     return "Account deletion timed out. Try again.";
   }
@@ -481,4 +659,3 @@ function formatDeleteError(error) {
     ? error.message
     : "We could not complete account deletion. Try again or contact support if this keeps happening.";
 }
-
