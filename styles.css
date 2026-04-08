@@ -168,6 +168,12 @@ li {
   gap: 14px;
 }
 
+.hero__note {
+  margin: 16px 0 0;
+  font-size: 0.98rem;
+  color: #9fb0c7;
+}
+
 .hero__highlights {
   display: grid;
   gap: 12px;
