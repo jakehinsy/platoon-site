@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Platoon | The All-in-One App for Fire Departments</title>
+  <title>Platoon | Software for Firefighter Unions</title>
   <meta
     name="description"
-    content="Platoon brings union announcements, events, polls, crew coordination, admin tools, and shift trades into one platform for fire departments."
+    content="Platoon is mobile-first software for firefighter unions, helping members and union leaders manage communication, events, calendars, votes, documents, groups, and shift trades."
   >
-  <meta property="og:title" content="Platoon | The All-in-One App for Fire Departments">
+  <meta property="og:title" content="Platoon | Software for Firefighter Unions">
   <meta
     property="og:description"
-    content="Union announcements, events, polls, crew coordination, admin tools, and shift trades in one fire department platform."
+    content="Mobile-first union software for firefighter communication, events, voting, documents, groups, and operations."
   >
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
   <link rel="stylesheet" href="styles.css">
@@ -25,49 +25,292 @@
 </head>
 <body>
   <div class="site-shell">
-    <nav class="utility-nav" aria-label="Utility navigation">
-      <a href="/support">Support</a>
-      <a href="/privacy">Privacy</a>
-      <a href="/delete-account">Delete Account</a>
-    </nav>
+    <header class="site-header">
+      <a class="brand-link" href="/" aria-label="Platoon homepage">
+        <img
+          class="brand-lockup__logo"
+          src="assets/images/platoon-logo.png"
+          alt="Platoon"
+          width="220"
+          height="72"
+        >
+      </a>
 
-    <header class="hero">
-      <div class="hero__copy">
-        <div class="brand-lockup">
-          <img
-            class="brand-lockup__logo"
-            src="assets/images/platoon-logo.png"
-            alt="Platoon"
-            width="240"
-            height="78"
-          >
-        </div>
-        <p class="eyebrow">All-in-one app for fire departments</p>
-        <h1>Run your fire department&rsquo;s communication in one place.</h1>
-        <p class="hero__lede">
-          Union announcements, events, polls, crew coordination, and shift trades &mdash; without
-          group texts, emails, or scattered tools.
-        </p>
-        <ul class="hero__highlights" aria-label="Core platform capabilities">
-          <li>Union announcements and department updates</li>
-          <li>Events, calendars, and member polls</li>
-          <li>Crew coordination, admin tools, and shift trades</li>
-        </ul>
-        <div class="hero__actions">
-          <a class="button button--primary" href="#waitlist">Get Platoon for Your Department</a>
-          <a class="button button--secondary" href="mailto:support@platoonapp.com">Request Early Access</a>
-        </div>
-        <p class="hero__note">
-          Replace group texts, email chains, and bulletin boards with one app.
-        </p>
-      </div>
+      <nav class="utility-nav" aria-label="Primary navigation">
+        <a href="#platform">Platform</a>
+        <a href="#mockups">Product</a>
+        <a href="#features">Features</a>
+        <a href="/support/">Support</a>
+      </nav>
+    </header>
 
-      <section class="waitlist-card" id="waitlist" aria-labelledby="waitlist-heading">
-        <p class="card-label">Early access</p>
-        <h2 id="waitlist-heading">Bring Platoon to your department</h2>
-        <p class="card-copy">
-          Join the waitlist to hear when Platoon opens to more departments, locals, and crews.
-        </p>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__copy">
+          <p class="eyebrow">Mobile-first firefighter union software</p>
+          <h1 id="hero-title">The operating platform for firefighter locals.</h1>
+          <p class="hero__lede">
+            Platoon gives union members and leadership one clean system for communication,
+            calendars, events, voting, documents, audience groups, and shift trading.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="#waitlist">Request Early Access</a>
+            <a class="button button--secondary" href="mailto:support@platoonapp.com">Talk to Platoon</a>
+          </div>
+          <dl class="proof-row" aria-label="Platform summary">
+            <div>
+              <dt>Built for</dt>
+              <dd>Firefighter unions</dd>
+            </div>
+            <div>
+              <dt>Member first</dt>
+              <dd>iOS and Android workflows</dd>
+            </div>
+            <div>
+              <dt>Leadership ready</dt>
+              <dd>Admin dashboard tools</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="hero__visual" aria-label="Mobile Platoon product preview">
+          <div class="phone-frame phone-frame--hero">
+            <div class="phone-screen">
+              <div class="mobile-topbar">
+                <span>Local 428</span>
+                <strong>Today</strong>
+              </div>
+              <div class="mobile-home-card">
+                <p class="mock-label">Union briefing</p>
+                <h2>Contract Q&amp;A tonight</h2>
+                <p>Station 4 training room at 1900. Questions can be submitted before the meeting.</p>
+              </div>
+              <div class="mobile-action-grid">
+                <div>Events</div>
+                <div>Announcements</div>
+                <div>Polls</div>
+                <div>Votes</div>
+              </div>
+              <div class="mobile-list">
+                <div>
+                  <span></span>
+                  <p>Ballot window opens Friday</p>
+                </div>
+                <div>
+                  <span></span>
+                  <p>Station 2 staffing update</p>
+                </div>
+                <div>
+                  <span></span>
+                  <p>Shift trade request pending</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--summary" id="platform" aria-labelledby="platform-title">
+        <div class="section-heading">
+          <p class="section-label">Platform</p>
+          <h2 id="platform-title">One place for union communication and day-to-day operations.</h2>
+          <p>
+            Platoon is designed around the way firefighter locals actually coordinate: members need
+            fast mobile access, while leadership needs structured tools for reaching the right people
+            and tracking what matters.
+          </p>
+        </div>
+        <div class="summary-grid">
+          <article class="summary-card">
+            <span class="card-icon" aria-hidden="true">01</span>
+            <h3>Member mobile experience</h3>
+            <p>Calendars, events, announcements, messaging, polls, documents, recommendations, and trades in one app.</p>
+          </article>
+          <article class="summary-card">
+            <span class="card-icon" aria-hidden="true">02</span>
+            <h3>Union leadership tools</h3>
+            <p>Publish communications, manage audiences, organize votes, and keep important activity visible.</p>
+          </article>
+          <article class="summary-card">
+            <span class="card-icon" aria-hidden="true">03</span>
+            <h3>Operational context</h3>
+            <p>Built for station, platoon, shift, and local workflows instead of generic office software.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section two-column" aria-labelledby="audience-title">
+        <div class="section-heading">
+          <p class="section-label">Two-sided value</p>
+          <h2 id="audience-title">Clear for members. Useful for leadership.</h2>
+        </div>
+        <div class="audience-panel">
+          <article>
+            <h3>For members</h3>
+            <ul class="check-list">
+              <li>Know what is happening across the local, station, and platoon.</li>
+              <li>Respond to polls and official votes from a mobile-first workflow.</li>
+              <li>Find documents, recommendations, messages, events, and trades quickly.</li>
+            </ul>
+          </article>
+          <article>
+            <h3>For union leaders</h3>
+            <ul class="check-list">
+              <li>Send announcements by group, station, platoon, or membership audience.</li>
+              <li>Coordinate meetings, ballots, recommendations, and member input.</li>
+              <li>Use the admin dashboard to see recent communications and upcoming work.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="mockups" aria-labelledby="mockups-title">
+        <div class="section-heading section-heading--center">
+          <p class="section-label">Product previews</p>
+          <h2 id="mockups-title">Editable marketing mockups based on real workflows.</h2>
+          <p>
+            These product-inspired views use pretend local, member, and event data. They are built
+            directly in the site so future copy and UI updates stay easy.
+          </p>
+        </div>
+
+        <div class="mockup-grid">
+          <article class="mockup-card">
+            <div class="mockup-card__copy">
+              <p class="mock-label">Mobile calendar</p>
+              <h3>Calendar built around shifts, union events, and station activity.</h3>
+            </div>
+            <div class="phone-frame" aria-label="Mock mobile calendar view">
+              <div class="phone-screen">
+                <div class="mobile-topbar">
+                  <span>April 2026</span>
+                  <strong>B Shift</strong>
+                </div>
+                <div class="calendar-grid" aria-hidden="true">
+                  <b>Sun</b><b>Mon</b><b>Tue</b><b>Wed</b><b>Thu</b><b>Fri</b><b>Sat</b>
+                  <span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span>
+                  <span>19</span><span class="has-event">20</span><span>21</span><span class="selected">22</span><span>23</span><span class="has-event">24</span><span>25</span>
+                  <span>26</span><span>27</span><span class="has-event">28</span><span>29</span><span>30</span><span>1</span><span>2</span>
+                </div>
+                <div class="day-summary">
+                  <p class="mock-label">Wed, Apr 22</p>
+                  <h4>Station 3 union night</h4>
+                  <p>1830 meeting, apparatus bay. Contract update and committee reports.</p>
+                </div>
+                <div class="event-list">
+                  <div><strong>0900</strong><span>Shift trade closes</span></div>
+                  <div><strong>1830</strong><span>Union meeting</span></div>
+                  <div><strong>All day</strong><span>Ballot reminder</span></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="mockup-card">
+            <div class="mockup-card__copy">
+              <p class="mock-label">Union home</p>
+              <h3>A focused feature hub for the tools members open most.</h3>
+            </div>
+            <div class="phone-frame" aria-label="Mock mobile union home view">
+              <div class="phone-screen">
+                <div class="mobile-topbar">
+                  <span>IAFF Local 428</span>
+                  <strong>Home</strong>
+                </div>
+                <div class="mobile-home-card mobile-home-card--light">
+                  <p class="mock-label">Pinned</p>
+                  <h2>Official vote active</h2>
+                  <p>Ratification ballot closes Friday at 1700.</p>
+                </div>
+                <div class="feature-hub">
+                  <div>Events <strong>4</strong></div>
+                  <div>Announcements <strong>12</strong></div>
+                  <div>Polls <strong>2</strong></div>
+                  <div>Official Votes <strong>1</strong></div>
+                  <div>Recommendations <strong>8</strong></div>
+                  <div>Documents <strong>36</strong></div>
+                </div>
+                <div class="message-preview">
+                  <p class="mock-label">Latest message</p>
+                  <h4>Safety committee</h4>
+                  <p>Draft language is ready for member review before next week.</p>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <article class="dashboard-mock" aria-label="Mock admin dashboard">
+          <div class="dashboard-sidebar">
+            <strong>Platoon Admin</strong>
+            <span>Overview</span>
+            <span>Communications</span>
+            <span>Events</span>
+            <span>Voting</span>
+            <span>Groups</span>
+          </div>
+          <div class="dashboard-main">
+            <div class="dashboard-header">
+              <div>
+                <p class="mock-label">Local 428 dashboard</p>
+                <h3>Union operations overview</h3>
+              </div>
+              <button type="button">New announcement</button>
+            </div>
+            <div class="metric-grid">
+              <div><span>Members reached</span><strong>842</strong></div>
+              <div><span>Open ballots</span><strong>1</strong></div>
+              <div><span>Events this month</span><strong>9</strong></div>
+              <div><span>Audience groups</span><strong>18</strong></div>
+            </div>
+            <div class="dashboard-columns">
+              <section>
+                <h4>Recent communications</h4>
+                <div class="dashboard-row"><span>Email + SMS</span><strong>Negotiations recap</strong><em>Sent to all members</em></div>
+                <div class="dashboard-row"><span>Announcement</span><strong>Station coverage update</strong><em>B Shift and Station 2</em></div>
+                <div class="dashboard-row"><span>Poll</span><strong>Training night preference</strong><em>126 responses</em></div>
+              </section>
+              <section>
+                <h4>Upcoming events</h4>
+                <div class="dashboard-row"><span>Apr 24</span><strong>Executive board</strong><em>1900 at union hall</em></div>
+                <div class="dashboard-row"><span>Apr 28</span><strong>Benefits workshop</strong><em>Families welcome</em></div>
+                <div class="dashboard-row"><span>May 2</span><strong>Charity stair climb</strong><em>Volunteer roster open</em></div>
+              </section>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section" id="features" aria-labelledby="features-title">
+        <div class="section-heading">
+          <p class="section-label">Capabilities</p>
+          <h2 id="features-title">The core workflows firefighter unions need in one platform.</h2>
+        </div>
+        <div class="feature-grid">
+          <article><h3>Calendars</h3><p>Shared schedules for union, personal, station, and platoon activity.</p></article>
+          <article><h3>Events</h3><p>Manage meetings, training nights, fundraisers, and member participation.</p></article>
+          <article><h3>Announcements</h3><p>Publish operational and union updates without relying on scattered threads.</p></article>
+          <article><h3>Messaging</h3><p>Keep focused member communication inside the same trusted platform.</p></article>
+          <article><h3>Email and SMS</h3><p>Reach members through app, email, and text messaging when urgency requires it.</p></article>
+          <article><h3>Polls</h3><p>Collect member input before decisions become long message chains.</p></article>
+          <article><h3>Official voting</h3><p>Support structured votes for union business with a clear member experience.</p></article>
+          <article><h3>Documents</h3><p>Make contracts, forms, meeting notes, and references easier to find.</p></article>
+          <article><h3>Audience groups</h3><p>Target communications by station, platoon, committee, role, or custom group.</p></article>
+          <article><h3>Recommendations</h3><p>Share trusted local resources and member-vetted recommendations.</p></article>
+          <article><h3>Shift trading</h3><p>Keep trade requests close to calendars and member coordination.</p></article>
+          <article><h3>Admin dashboard</h3><p>Give union leadership a practical place to review activity and send updates.</p></article>
+        </div>
+      </section>
+
+      <section class="section cta-section" id="waitlist" aria-labelledby="waitlist-heading">
+        <div>
+          <p class="section-label">Early access</p>
+          <h2 id="waitlist-heading">Bring Platoon to your local.</h2>
+          <p>
+            Tell us where Platoon could help your union or department. We will follow up with
+            availability and onboarding details.
+          </p>
+        </div>
 
         <form
           class="waitlist-form"
@@ -86,87 +329,29 @@
             required
           >
           <button type="submit" class="button button--primary">Request Early Access</button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
         </form>
-
-        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-      </section>
-    </header>
-
-    <main>
-      <section class="section" aria-labelledby="platform-heading">
-        <div class="section-heading">
-          <p class="section-label">App overview</p>
-          <h2 id="platform-heading">Built for how fire departments actually run</h2>
-        </div>
-        <div class="card-grid">
-          <article class="info-card">
-            <h3>Union communication</h3>
-            <p>Share announcements, bargaining updates, and local information in one place members already check.</p>
-          </article>
-          <article class="info-card">
-            <h3>Events and calendar</h3>
-            <p>Keep meetings, training, socials, and key department dates visible without juggling separate tools.</p>
-          </article>
-          <article class="info-card">
-            <h3>Polls and member input</h3>
-            <p>Collect quick feedback from crews and union members before decisions turn into long message threads.</p>
-          </article>
-          <article class="info-card">
-            <h3>Crew coordination</h3>
-            <p>Keep updates, reminders, and day-to-day coordination organized across stations, crews, and shifts.</p>
-          </article>
-          <article class="info-card">
-            <h3>Shift trades</h3>
-            <p>Trades still matter. Platoon keeps them simple, but now they live inside a broader department workflow.</p>
-          </article>
-          <article class="info-card">
-            <h3>Admin tools</h3>
-            <p>Give command staff and local leaders cleaner visibility into activity, communication, and follow-through.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section section--compact" aria-labelledby="audience-heading">
-        <div class="section-heading">
-          <p class="section-label">Who it serves</p>
-          <h2 id="audience-heading">Built for small departments, unions, and large departments</h2>
-        </div>
-        <div class="audience-grid">
-          <article class="info-card">
-            <h3>Small departments</h3>
-            <p>Platoon gives smaller teams one simple place for updates, events, polls, and crew coordination, even when trade volume is low.</p>
-          </article>
-          <article class="info-card">
-            <h3>Unions and locals</h3>
-            <p>Keep announcements, member input, and event communication organized without relying on fragmented social threads.</p>
-          </article>
-          <article class="info-card">
-            <h3>Larger departments</h3>
-            <p>Support high trade activity while giving the rest of the department a better system for communication and operational updates.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section section--compact" aria-labelledby="built-for-heading">
-        <div class="section-heading">
-          <p class="section-label">Why Platoon</p>
-          <h2 id="built-for-heading">Built for the firehouse &mdash; not generic workplace software</h2>
-        </div>
-        <ul class="trust-list">
-          <li>Designed around fire department communication and coordination, not generic office software.</li>
-          <li>Simple enough for everyday crew use, but structured enough for union leaders and admins.</li>
-          <li>Consolidates announcements, events, polls, trades, and updates into one credible department tool.</li>
-        </ul>
       </section>
     </main>
 
     <footer class="footer">
-      <a href="/support">Support</a>
-      <a href="/privacy">Privacy</a>
-      <a href="/delete-account">Delete Account</a>
-      <a href="mailto:support@platoonapp.com">support@platoonapp.com</a>
-      <a href="mailto:review@platoonapp.com">review@platoonapp.com</a>
-      <p>&copy; Platoon</p>
+      <div>
+        <img
+          class="footer-logo"
+          src="assets/images/platoon-logo.png"
+          alt="Platoon"
+          width="150"
+          height="49"
+        >
+        <p>Mobile-first software for firefighter unions and leadership.</p>
+      </div>
+      <nav aria-label="Footer navigation">
+        <a href="/support/">Support</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/delete-account/">Delete Account</a>
+        <a href="/reset-password/">Reset Password</a>
+        <a href="mailto:support@platoonapp.com">support@platoonapp.com</a>
+      </nav>
     </footer>
   </div>
 

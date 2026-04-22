@@ -2,6 +2,24 @@
 
 Static marketing site plus the public password reset and account deletion bridges for Platoon.
 
+The repo is intentionally a small static site, not a Next.js app. The marketing homepage is built from plain HTML and shared CSS so the existing public utility routes keep working as static directory routes with no framework migration risk.
+
+## Marketing Site Structure
+
+- `index.html` contains the public marketing homepage for Platoon.
+- `styles.css` contains the shared visual system, marketing sections, mock product components, and utility-page styles.
+- `assets/images/platoon-logo.png` and `assets/images/favicon.png` are reused across the homepage and utility pages.
+
+The homepage positions Platoon as mobile-first software for firefighter unions and union leadership. It includes:
+- A clean white product-led hero.
+- Member and union leadership value sections.
+- Editable HTML/CSS product mockups using fake data only:
+  - mobile calendar view
+  - mobile union home / feature hub
+  - admin dashboard overview
+- A feature grid covering calendars, events, announcements, messaging, email, SMS, polls, official voting, recommendations, documents, audience groups, and shift trading.
+- The existing Formspree early-access form action.
+
 ## Public Routes
 
 The site currently exposes these public static routes:
@@ -10,6 +28,12 @@ The site currently exposes these public static routes:
 - `/support/`
 - `/privacy/`
 - `/delete-account/`
+
+Route preservation note:
+- `/reset-password/` is preserved as the password reset bridge.
+- `/delete-account/` is preserved as the self-service account deletion bridge.
+- `/support/` is preserved for public support.
+- `/privacy/` is preserved for the public privacy policy.
 
 ## Password Reset Bridge
 
@@ -81,3 +105,18 @@ The page expects `POST platoon-delete-account-endpoint` to:
 No web server changes are required for the static routes. On Vercel, each route works as a static directory route because the page lives in a matching folder such as `reset-password/index.html`, `support/index.html`, `privacy/index.html`, or `delete-account/index.html`.
 
 The deletion flow does require a deployed backend endpoint before it can complete successfully in production.
+
+## Local Verification
+
+Because the site is static, you can serve it locally from PowerShell with:
+
+```powershell
+python -m http.server 4173
+```
+
+Then verify:
+- `http://localhost:4173/`
+- `http://localhost:4173/reset-password/`
+- `http://localhost:4173/delete-account/`
+- `http://localhost:4173/support/`
+- `http://localhost:4173/privacy/`
