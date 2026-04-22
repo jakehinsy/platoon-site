@@ -159,6 +159,10 @@ dd {
   max-width: 720px;
 }
 
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.45rem);
+}
+
 .hero__lede {
   max-width: 64ch;
   margin-bottom: 30px;
@@ -183,7 +187,7 @@ dd {
 .eyebrow,
 .section-label,
 .card-label,
-.mock-label {
+.product-label {
   margin: 0 0 12px;
   color: var(--accent-strong);
   font-size: 0.78rem;
@@ -309,7 +313,6 @@ button:disabled {
 
 .summary-card,
 .feature-grid article,
-.product-card,
 .audience-panel,
 .cta-section,
 .support-card,
@@ -385,27 +388,34 @@ button:disabled {
 }
 
 .product-grid {
+  gap: 34px 24px;
   margin-bottom: 20px;
 }
 
 .product-card {
   display: grid;
-  gap: 24px;
-  align-items: center;
-  padding: 24px;
-  background: var(--surface);
-  overflow: hidden;
+  gap: 18px;
+  align-items: start;
 }
 
 .product-card__copy {
   max-width: 440px;
 }
 
+.product-card--phone {
+  padding: 0 8px 8px;
+  overflow: visible;
+}
+
+.product-card--phone .product-card__copy {
+  min-height: 104px;
+}
+
 .product-phone-image {
-  width: min(100%, 310px);
+  width: min(100%, 300px);
   height: auto;
   margin: 0 auto;
-  filter: drop-shadow(0 18px 28px rgba(17, 24, 39, 0.12));
+  filter: drop-shadow(0 22px 30px rgba(17, 24, 39, 0.15));
 }
 
 .product-hero {
@@ -413,14 +423,20 @@ button:disabled {
 }
 
 .product-hero img {
-  width: min(100%, 350px);
+  width: min(100%, 375px);
   height: auto;
   margin: 0 auto;
-  filter: drop-shadow(0 20px 34px rgba(17, 24, 39, 0.14));
+  filter: drop-shadow(0 26px 38px rgba(17, 24, 39, 0.16));
 }
 
 .product-card--dashboard {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
   gap: 18px;
+  overflow: hidden;
 }
 
 .dashboard-image-frame {
@@ -832,6 +848,12 @@ button:disabled {
   }
 }
 
+@media (min-width: 960px) {
+  .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 719px) {
   .site-shell {
     width: min(calc(100% - 1.25rem), var(--max-width));
@@ -863,13 +885,13 @@ button:disabled {
     padding: 54px 0;
   }
 
-  .product-card,
+  .product-card--dashboard,
   .cta-section {
     padding: 20px;
   }
 
   .product-phone-image {
-    width: min(100%, 280px);
+    width: min(100%, 285px);
   }
 
   .support-card,
