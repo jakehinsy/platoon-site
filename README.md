@@ -27,6 +27,7 @@ The site currently exposes these public static routes:
 - `/reset-password/`
 - `/support/`
 - `/privacy/`
+- `/terms/`
 - `/delete-account/`
 
 Route preservation note:
@@ -34,6 +35,7 @@ Route preservation note:
 - `/delete-account/` is preserved as the self-service account deletion bridge.
 - `/support/` is preserved for public support.
 - `/privacy/` is preserved for the public privacy policy.
+- `/terms/` is preserved for the public terms of service and messaging terms.
 
 ## Password Reset Bridge
 
@@ -120,3 +122,4 @@ Then verify:
 - `http://localhost:4173/delete-account/`
 - `http://localhost:4173/support/`
 - `http://localhost:4173/privacy/`
+- `http://localhost:4173/terms/`
