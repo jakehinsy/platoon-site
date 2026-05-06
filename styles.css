@@ -583,7 +583,7 @@ button:disabled {
   flex-wrap: wrap;
   justify-content: center;
   gap: 14px;
-  margin: 28px 0 18px;
+  margin: 28px 0 26px;
 }
 
 .store-badge {
@@ -607,23 +607,12 @@ button:disabled {
 
 .store-badge img {
   display: block;
-  height: 52px;
+  height: 54px;
   width: auto;
 }
 
 .store-badge--google img {
-  height: 58px;
-}
-
-.download-options[data-platform="ios"] .store-badge[data-primary="true"],
-.download-options[data-platform="android"] .store-badge[data-primary="true"] {
-  order: -1;
-}
-
-.download-note {
-  margin-bottom: 24px;
-  color: var(--muted);
-  font-size: 0.94rem;
+  height: 54px;
 }
 
 .download-actions {
