@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Get the Platoon App</title>
+  <meta
+    name="description"
+    content="Download Platoon to access your schedule, trades, messages, union updates, documents, and more."
+  >
+  <meta property="og:title" content="Get the Platoon App">
+  <meta
+    property="og:description"
+    content="Download Platoon to access your schedule, trades, messages, union updates, documents, and more."
+  >
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://platoonapp.com/download">
+  <meta property="og:image" content="https://platoonapp.com/assets/images/platoon-logo.png">
+  <link rel="canonical" href="https://platoonapp.com/download">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://tools.applemediaservices.com">
+  <link rel="preconnect" href="https://play.google.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png">
+</head>
+<body class="support-page">
+  <div class="site-shell support-shell">
+    <main class="support-layout">
+      <section class="support-card download-card" aria-labelledby="download-title">
+        <div class="support-card__brand">
+          <a class="brand-link" href="/" aria-label="Platoon homepage">
+            <img
+              class="brand-lockup__logo"
+              src="/assets/images/platoon-logo.png"
+              alt="Platoon"
+              width="220"
+              height="72"
+            >
+          </a>
+          <p class="eyebrow">Member app</p>
+        </div>
+
+        <div class="support-card__content download-content">
+          <h1 id="download-title">Get the Platoon App</h1>
+          <p class="support-copy">
+            Download Platoon to access your schedule, trades, messages, union updates, documents, and more.
+          </p>
+
+          <div class="download-options" data-platform="unknown" aria-label="Download Platoon app">
+            <a
+              class="store-badge store-badge--apple"
+              data-store-option="ios"
+              href="https://apps.apple.com/us/app/platoon-firehouse/id6760314101"
+              aria-label="Download Platoon on the App Store"
+            >
+              <img
+                src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
+                alt="Download on the App Store"
+                width="250"
+                height="83"
+              >
+            </a>
+
+            <a
+              class="store-badge store-badge--google"
+              data-store-option="android"
+              href="https://play.google.com/store/apps/details?id=com.jakehinsy.mobile"
+              aria-label="Get Platoon on Google Play"
+            >
+              <img
+                src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                alt="Get it on Google Play"
+                width="646"
+                height="250"
+              >
+            </a>
+          </div>
+
+          <p class="download-note">
+            Both app stores remain available from this page on every device.
+          </p>
+
+          <div class="support-actions download-actions">
+            <a class="button button--secondary" href="/">Back to homepage</a>
+            <a class="button button--secondary" href="/support/">Support</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var options = document.querySelector(".download-options");
+
+      if (!options) {
+        return;
+      }
+
+      var userAgent = navigator.userAgent || "";
+      var isAndroid = /Android/i.test(userAgent);
+      var isIos = /iPhone|iPad|iPod/i.test(userAgent);
+      var primaryStore = isAndroid ? "android" : isIos ? "ios" : "";
+
+      if (!primaryStore) {
+        return;
+      }
+
+      options.dataset.platform = primaryStore;
+
+      var primaryLink = options.querySelector("[data-store-option='" + primaryStore + "']");
+
+      if (primaryLink) {
+        primaryLink.dataset.primary = "true";
+        options.prepend(primaryLink);
+      }
+    }());
+  </script>
+</body>
+</html>

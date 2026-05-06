@@ -569,6 +569,67 @@ button:disabled {
   width: min(100%, 760px);
 }
 
+.download-card {
+  width: min(100%, 620px);
+  text-align: center;
+}
+
+.download-content h1 {
+  font-size: clamp(2.25rem, 8vw, 3.5rem);
+}
+
+.download-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin: 28px 0 18px;
+}
+
+.store-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 3px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.store-badge:hover,
+.store-badge:focus-visible {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
+}
+
+.store-badge img {
+  display: block;
+  height: 52px;
+  width: auto;
+}
+
+.store-badge--google img {
+  height: 58px;
+}
+
+.download-options[data-platform="ios"] .store-badge[data-primary="true"],
+.download-options[data-platform="android"] .store-badge[data-primary="true"] {
+  order: -1;
+}
+
+.download-note {
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.download-actions {
+  justify-content: center;
+}
+
 .reset-card {
   position: relative;
   width: min(100%, 560px);
