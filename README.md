@@ -4,6 +4,18 @@ Static marketing site plus the public password reset and account deletion bridge
 
 The repo is intentionally a small static site, not a Next.js app. The marketing homepage is built from plain HTML and shared CSS so the existing public utility routes keep working as static directory routes with no framework migration risk.
 
+## Help / Getting Started Hub
+
+The site includes a mobile-first onboarding hub at `/help/`. It is designed for firefighters who need to understand the core Platoon workflows in 1-2 minutes without one-on-one onboarding.
+
+The Phase 1 help page focuses on:
+- quick-start links for schedules, trades, chats, union updates, and notifications
+- reusable visual guide sections with screenshot placeholder containers
+- short plain-language FAQ accordions
+- practical tips and a support handoff
+
+Future iterations should replace the placeholder screenshot frames with real app screenshots and add short walkthrough videos for the highest-value workflows.
+
 ## Marketing Site Structure
 
 - `index.html` contains the public marketing homepage for Platoon.
@@ -26,6 +38,7 @@ The site currently exposes these public static routes:
 - `/`
 - `/reset-password/`
 - `/support/`
+- `/help/`
 - `/privacy/`
 - `/terms/`
 - `/delete-account/`
@@ -34,6 +47,7 @@ Route preservation note:
 - `/reset-password/` is preserved as the password reset bridge.
 - `/delete-account/` is preserved as the self-service account deletion bridge.
 - `/support/` is preserved for public support.
+- `/help/` is the public firefighter onboarding and getting started hub.
 - `/privacy/` is preserved for the public privacy policy.
 - `/terms/` is preserved for the public terms of service and messaging terms.
 
@@ -121,5 +135,6 @@ Then verify:
 - `http://localhost:4173/reset-password/`
 - `http://localhost:4173/delete-account/`
 - `http://localhost:4173/support/`
+- `http://localhost:4173/help/`
 - `http://localhost:4173/privacy/`
 - `http://localhost:4173/terms/`
