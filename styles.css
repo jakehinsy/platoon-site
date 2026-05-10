@@ -924,20 +924,19 @@ button:disabled {
 
 .guide-stack {
   display: grid;
-  gap: 26px;
+  gap: 20px;
 }
 
 .guide-block {
   display: grid;
   gap: 24px;
   align-items: center;
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background:
-    linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%),
-    #ffffff;
-  box-shadow: 0 18px 44px rgba(17, 24, 39, 0.07);
+  padding: 20px 0;
+  border-top: 1px solid rgba(223, 227, 232, 0.82);
+}
+
+.guide-block:nth-child(even) {
+  background: linear-gradient(90deg, rgba(247, 248, 250, 0.72), transparent 76%);
 }
 
 .guide-block__copy {
@@ -1171,9 +1170,24 @@ button:disabled {
   }
 
   .guide-block {
-    grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1fr);
-    gap: 34px;
-    padding: 22px;
+    grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1fr);
+    gap: 36px;
+    padding: 30px 0;
+  }
+
+  .screenshot-frame {
+    min-height: 370px;
+    padding: 22px 18px;
+  }
+
+  .help-screenshot {
+    width: min(100%, 270px);
+    max-height: 560px;
+  }
+
+  .screenshot-fallback {
+    width: min(100%, 236px);
+    min-height: 324px;
   }
 
   .guide-block__copy {
@@ -1182,6 +1196,10 @@ button:disabled {
 
   .guide-block:nth-child(even) .screenshot-frame {
     order: 2;
+  }
+
+  .guide-block:nth-child(even) {
+    background: linear-gradient(90deg, transparent 0%, rgba(247, 248, 250, 0.78) 24%, rgba(247, 248, 250, 0.5) 100%);
   }
 
   .guide-block:nth-child(even) .guide-block__copy {
