@@ -10,11 +10,20 @@ The site includes a mobile-first onboarding hub at `/help/`. It is designed for 
 
 The Phase 1 help page focuses on:
 - quick-start links for schedules, trades, chats, union updates, and notifications
-- reusable visual guide sections with screenshot placeholder containers
+- reusable visual guide sections with local screenshot slots
 - short plain-language FAQ accordions
 - practical tips and a support handoff
 
-Future iterations should replace the placeholder screenshot frames with real app screenshots and add short walkthrough videos for the highest-value workflows.
+Help screenshots live in `assets/help/` and are referenced by `/help/`.
+
+Current screenshot filenames:
+- `calendar.png`
+- `trades.png`
+- `chats.png`
+- `union-updates.png`
+- `notifications.png`
+
+To replace a help screenshot, export the mobile app screenshot as a PNG with the matching filename and place it in `assets/help/`. If an image is missing, the help page shows a styled fallback slot instead of a broken image. Future iterations can add short walkthrough videos for the highest-value workflows.
 
 ## Marketing Site Structure
 

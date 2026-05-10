@@ -139,24 +139,22 @@
         <div class="section-heading">
           <p class="section-label">Visual guide</p>
           <h2 id="visual-guide-title">Visual Guide</h2>
-          <p>These placeholders are built to be swapped with real app screenshots as rollout materials are finalized.</p>
+          <p>Each guide uses a real screenshot slot that can be updated as the app changes.</p>
         </div>
 
         <div class="guide-stack">
           <article class="guide-block" id="calendar-guide">
-            <div class="screenshot-placeholder screenshot-placeholder--calendar" aria-label="Calendar screenshot placeholder">
-              <div class="placeholder-phone">
-                <div class="placeholder-bar"></div>
-                <div class="placeholder-calendar-grid" aria-hidden="true">
-                  <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                  <span></span><span class="is-shift"></span><span></span><span class="is-event"></span><span></span><span></span><span class="is-shift"></span>
-                  <span></span><span></span><span class="is-selected"></span><span></span><span class="is-trade"></span><span></span><span></span>
-                  <span class="is-event"></span><span></span><span></span><span class="is-shift"></span><span></span><span></span><span></span>
-                </div>
-                <div class="placeholder-detail-card">
-                  <strong>Selected day</strong>
-                  <span>Shift, event, and trade details</span>
-                </div>
+            <div class="screenshot-frame" aria-label="Calendar screenshot">
+              <img
+                class="help-screenshot"
+                src="/assets/help/calendar.png"
+                alt="Calendar showing shifts and day details"
+                loading="lazy"
+                width="390"
+                height="844"
+              >
+              <div class="screenshot-fallback" aria-hidden="true">
+                <span>Calendar screenshot</span>
               </div>
             </div>
             <div class="guide-block__copy">
@@ -172,15 +170,17 @@
           </article>
 
           <article class="guide-block" id="trades-guide">
-            <div class="screenshot-placeholder" aria-label="Trades screenshot placeholder">
-              <div class="placeholder-phone">
-                <div class="placeholder-bar"></div>
-                <div class="placeholder-list" aria-hidden="true">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
+            <div class="screenshot-frame" aria-label="Trades screenshot">
+              <img
+                class="help-screenshot"
+                src="/assets/help/trades.png"
+                alt="Trades list and trade actions"
+                loading="lazy"
+                width="390"
+                height="844"
+              >
+              <div class="screenshot-fallback" aria-hidden="true">
+                <span>Trades screenshot</span>
               </div>
             </div>
             <div class="guide-block__copy">
@@ -196,15 +196,17 @@
           </article>
 
           <article class="guide-block" id="chats-guide">
-            <div class="screenshot-placeholder" aria-label="Chats screenshot placeholder">
-              <div class="placeholder-phone">
-                <div class="placeholder-bar"></div>
-                <div class="placeholder-chat" aria-hidden="true">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
+            <div class="screenshot-frame" aria-label="Chats screenshot">
+              <img
+                class="help-screenshot"
+                src="/assets/help/chats.png"
+                alt="Chats for member conversations"
+                loading="lazy"
+                width="390"
+                height="844"
+              >
+              <div class="screenshot-fallback" aria-hidden="true">
+                <span>Chats screenshot</span>
               </div>
             </div>
             <div class="guide-block__copy">
@@ -220,15 +222,17 @@
           </article>
 
           <article class="guide-block" id="union-guide">
-            <div class="screenshot-placeholder" aria-label="Union updates screenshot placeholder">
-              <div class="placeholder-phone">
-                <div class="placeholder-bar"></div>
-                <div class="placeholder-list placeholder-list--mixed" aria-hidden="true">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
+            <div class="screenshot-frame" aria-label="Union updates screenshot">
+              <img
+                class="help-screenshot"
+                src="/assets/help/union-updates.png"
+                alt="Union updates and announcements"
+                loading="lazy"
+                width="390"
+                height="844"
+              >
+              <div class="screenshot-fallback" aria-hidden="true">
+                <span>Union updates screenshot</span>
               </div>
             </div>
             <div class="guide-block__copy">
@@ -244,15 +248,17 @@
           </article>
 
           <article class="guide-block" id="notifications-guide">
-            <div class="screenshot-placeholder" aria-label="Notifications screenshot placeholder">
-              <div class="placeholder-phone">
-                <div class="placeholder-bar"></div>
-                <div class="placeholder-notifications" aria-hidden="true">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
+            <div class="screenshot-frame" aria-label="Notifications screenshot">
+              <img
+                class="help-screenshot"
+                src="/assets/help/notifications.png"
+                alt="Notification settings and alerts"
+                loading="lazy"
+                width="390"
+                height="844"
+              >
+              <div class="screenshot-fallback" aria-hidden="true">
+                <span>Notifications screenshot</span>
               </div>
             </div>
             <div class="guide-block__copy">
@@ -380,5 +386,46 @@
       </nav>
     </footer>
   </div>
+
+  <script>
+    (function () {
+      var screenshots = document.querySelectorAll(".help-screenshot");
+
+      screenshots.forEach(function (image) {
+        var frame = image.closest(".screenshot-frame");
+
+        if (!frame) {
+          return;
+        }
+
+        function showFallback() {
+          image.hidden = true;
+          frame.dataset.state = "missing";
+        }
+
+        function showImage() {
+          image.hidden = false;
+          frame.dataset.state = "loaded";
+        }
+
+        image.addEventListener("error", showFallback);
+        image.addEventListener("load", function () {
+          if (image.naturalWidth > 0) {
+            showImage();
+          } else {
+            showFallback();
+          }
+        });
+
+        if (image.complete) {
+          if (image.naturalWidth > 0) {
+            showImage();
+          } else {
+            showFallback();
+          }
+        }
+      });
+    }());
+  </script>
 </body>
 </html>

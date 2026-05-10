@@ -942,7 +942,8 @@ button:disabled {
   max-width: 560px;
 }
 
-.screenshot-placeholder {
+.screenshot-frame {
+  position: relative;
   display: grid;
   min-height: 420px;
   place-items: center;
@@ -954,105 +955,52 @@ button:disabled {
     var(--surface);
 }
 
-.placeholder-phone {
-  display: grid;
-  gap: 16px;
-  width: min(100%, 250px);
-  min-height: 360px;
-  padding: 18px;
-  border: 10px solid #15171a;
+.help-screenshot {
+  display: none;
+  width: min(100%, 300px);
+  height: auto;
+  max-height: 640px;
   border-radius: 28px;
+  object-fit: contain;
   background: #ffffff;
   box-shadow: 0 24px 48px rgba(17, 24, 39, 0.14);
 }
 
-.placeholder-bar {
-  width: 58px;
-  height: 7px;
-  margin: 0 auto 4px;
-  border-radius: 999px;
-  background: var(--border-strong);
-}
-
-.placeholder-calendar-grid {
+.screenshot-fallback {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  width: min(100%, 260px);
+  min-height: 360px;
+  place-items: center;
+  padding: 22px;
+  border: 10px solid #15171a;
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, #ffffff 0%, var(--panel-strong) 100%),
+    #ffffff;
+  color: var(--muted-strong);
+  box-shadow: 0 24px 48px rgba(17, 24, 39, 0.14);
+  text-align: center;
 }
 
-.placeholder-calendar-grid span {
-  aspect-ratio: 1;
+.screenshot-fallback span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  background: var(--surface-strong);
-}
-
-.placeholder-calendar-grid .is-shift {
-  background: #dce8f8;
-}
-
-.placeholder-calendar-grid .is-event {
-  background: #f7e3aa;
-}
-
-.placeholder-calendar-grid .is-trade {
-  background: #dcefe3;
-}
-
-.placeholder-calendar-grid .is-selected {
-  background: var(--accent);
-}
-
-.placeholder-detail-card {
-  display: grid;
-  gap: 6px;
-  margin-top: auto;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--panel-strong);
-}
-
-.placeholder-detail-card strong,
-.placeholder-detail-card span {
-  font-size: 0.86rem;
-}
-
-.placeholder-detail-card span {
-  color: var(--muted);
-}
-
-.placeholder-list,
-.placeholder-chat,
-.placeholder-notifications {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-}
-
-.placeholder-list span,
-.placeholder-notifications span {
-  min-height: 48px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--panel-strong);
-}
-
-.placeholder-list span:nth-child(2),
-.placeholder-list--mixed span:nth-child(3),
-.placeholder-notifications span:nth-child(1) {
   background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 0.88rem;
+  font-weight: 900;
 }
 
-.placeholder-chat span {
-  min-height: 42px;
-  border-radius: 18px;
-  background: var(--surface-strong);
+.screenshot-frame[data-state="loaded"] .help-screenshot {
+  display: block;
 }
 
-.placeholder-chat span:nth-child(2),
-.placeholder-chat span:nth-child(4) {
-  margin-left: 42px;
-  background: var(--accent-soft);
+.screenshot-frame[data-state="loaded"] .screenshot-fallback {
+  display: none;
 }
 
 .faq-list {
@@ -1192,7 +1140,7 @@ button:disabled {
     padding: 24px;
   }
 
-  .guide-block:nth-child(even) .screenshot-placeholder {
+  .guide-block:nth-child(even) .screenshot-frame {
     order: 2;
   }
 
@@ -1280,12 +1228,17 @@ button:disabled {
     padding: 20px;
   }
 
-  .screenshot-placeholder {
+  .screenshot-frame {
     min-height: 360px;
     padding: 18px 12px;
   }
 
-  .placeholder-phone {
+  .help-screenshot {
+    width: min(100%, 250px);
+    max-height: 540px;
+  }
+
+  .screenshot-fallback {
     width: min(100%, 230px);
     min-height: 320px;
   }
