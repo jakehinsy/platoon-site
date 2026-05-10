@@ -6,11 +6,12 @@ The repo is intentionally a small static site, not a Next.js app. The marketing 
 
 ## Help / Getting Started Hub
 
-The site includes a mobile-first onboarding hub at `/help/`. It is designed for firefighters who need to understand the core Platoon workflows in 1-2 minutes without one-on-one onboarding.
+The site includes a mobile-first onboarding hub at `/help/`. It is designed for firefighters who need to understand the core Platoon basics in 1-2 minutes without one-on-one onboarding.
 
 The Phase 1 help page focuses on:
 - quick-start links for schedules, trades, chats, union updates, and notifications
 - reusable visual guide sections with local screenshot slots
+- a Calendar Help flow for schedules, personal calendars, events, trade warnings, and trade blocks
 - short plain-language FAQ accordions
 - practical tips and a support handoff
 
@@ -23,7 +24,19 @@ Current screenshot filenames:
 - `union-updates.png`
 - `notifications.png`
 
-To replace a help screenshot, export the mobile app screenshot as a PNG with the matching filename and place it in `assets/help/`. If an image is missing, the help page shows a styled fallback slot instead of a broken image. Future iterations can add short walkthrough videos for the highest-value workflows.
+Calendar Help screenshots live in `assets/help/calendar-flow/`.
+
+Expected Calendar Help filenames:
+- `calendar-overview.png`
+- `manage-calendars.png`
+- `new-calendar.png`
+- `trade-impact.png`
+- `manage-events.png`
+- `new-personal-event.png`
+
+Final Calendar Help screenshots should be 1080px wide PNGs.
+
+To replace a help screenshot, export the mobile app screenshot as a PNG with the matching filename and place it in `assets/help/`. If an image is missing, the help page shows a styled fallback slot instead of a broken image. Future iterations can add short walkthrough videos for the highest-value tasks.
 
 ## Marketing Site Structure
 

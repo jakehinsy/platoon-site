@@ -912,14 +912,52 @@ button:disabled {
 .quick-start-card:hover,
 .quick-start-card:focus-visible,
 .help-anchor-panel a:hover,
-.help-anchor-panel a:focus-visible {
+.help-anchor-panel a:focus-visible,
+.calendar-help-nav a:hover,
+.calendar-help-nav a:focus-visible {
   border-color: var(--accent);
   box-shadow: var(--shadow);
   transform: translateY(-1px);
 }
 
-.visual-guide-section {
+.visual-guide-section,
+.calendar-help-section {
   background: linear-gradient(180deg, #ffffff 0%, var(--surface) 100%);
+}
+
+.help-tip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin: 0 0 22px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-size: 0.94rem;
+  font-weight: 800;
+}
+
+.calendar-help-nav {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.calendar-help-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  color: var(--text);
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: var(--shadow-soft);
+  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
 }
 
 .guide-stack {
@@ -1035,6 +1073,21 @@ button:disabled {
 
 .screenshot-frame[data-state="loaded"] .screenshot-fallback {
   display: none;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 18px;
+  color: var(--muted-strong);
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--accent-strong);
 }
 
 .faq-list {
@@ -1169,6 +1222,10 @@ button:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .calendar-help-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .guide-block {
     grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1fr);
     gap: 36px;
@@ -1229,6 +1286,10 @@ button:disabled {
 
   .quick-start-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .calendar-help-nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
