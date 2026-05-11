@@ -4,14 +4,16 @@ Static marketing site plus the public password reset and account deletion bridge
 
 The repo is intentionally a small static site, not a Next.js app. The marketing homepage is built from plain HTML and shared CSS so the existing public utility routes keep working as static directory routes with no framework migration risk.
 
-## Help / Getting Started Hub
+## Help / Getting Started
 
 The site includes a mobile-first onboarding hub at `/help/`. It is designed for firefighters who need to understand the core Platoon basics in 1-2 minutes without one-on-one onboarding.
 
-The Phase 1 help page focuses on:
+The dedicated Calendar walkthrough lives at `/help/calendar/`. It covers schedules, personal calendars, events, trade warnings, and trade blocks without making the main Help page too long.
+
+The main Help hub focuses on:
 - quick-start links for schedules, trades, chats, union updates, and notifications
 - reusable visual guide sections with local screenshot slots
-- a Calendar Help flow for schedules, personal calendars, events, trade warnings, and trade blocks
+- feature walkthrough cards that can link to deeper pages
 - short plain-language FAQ accordions
 - practical tips and a support handoff
 
@@ -35,6 +37,8 @@ Expected Calendar Help filenames:
 - `new-personal-event.png`
 
 Final Calendar Help screenshots should be 1080px wide PNGs.
+
+Future walkthrough pages can be added for trades, chats, union, and notifications using the same static route pattern, such as `/help/trades/`.
 
 To replace a help screenshot, export the mobile app screenshot as a PNG with the matching filename and place it in `assets/help/`. If an image is missing, the help page shows a styled fallback slot instead of a broken image. Future iterations can add short walkthrough videos for the highest-value tasks.
 
@@ -61,6 +65,7 @@ The site currently exposes these public static routes:
 - `/reset-password/`
 - `/support/`
 - `/help/`
+- `/help/calendar/`
 - `/privacy/`
 - `/terms/`
 - `/delete-account/`
@@ -70,6 +75,7 @@ Route preservation note:
 - `/delete-account/` is preserved as the self-service account deletion bridge.
 - `/support/` is preserved for public support.
 - `/help/` is the public firefighter onboarding and getting started hub.
+- `/help/calendar/` is the dedicated Calendar walkthrough.
 - `/privacy/` is preserved for the public privacy policy.
 - `/terms/` is preserved for the public terms of service and messaging terms.
 
@@ -158,5 +164,6 @@ Then verify:
 - `http://localhost:4173/delete-account/`
 - `http://localhost:4173/support/`
 - `http://localhost:4173/help/`
+- `http://localhost:4173/help/calendar/`
 - `http://localhost:4173/privacy/`
 - `http://localhost:4173/terms/`
