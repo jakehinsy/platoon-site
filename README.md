@@ -62,6 +62,7 @@ The homepage positions Platoon as mobile-first software for firefighter unions a
 
 The site currently exposes these public static routes:
 - `/`
+- `/download/`
 - `/reset-password/`
 - `/support/`
 - `/help/`
@@ -71,6 +72,7 @@ The site currently exposes these public static routes:
 - `/delete-account/`
 
 Route preservation note:
+- `/download/` provides App Store and Google Play links and safely hands organization invite URLs off to the installed Platoon app.
 - `/reset-password/` is preserved as the password reset bridge.
 - `/delete-account/` is preserved as the self-service account deletion bridge.
 - `/support/` is preserved for public support.
@@ -149,6 +151,16 @@ The page expects `POST platoon-delete-account-endpoint` to:
 No web server changes are required for the static routes. On Vercel, each route works as a static directory route because the page lives in a matching folder such as `reset-password/index.html`, `support/index.html`, `privacy/index.html`, or `delete-account/index.html`.
 
 The deletion flow does require a deployed backend endpoint before it can complete successfully in production.
+
+## Organization Invite Handoff
+
+Organization invite QR codes use an HTTPS URL such as:
+
+```text
+https://platoonapp.com/download?organizationJoinCode=ABC123&deepLink=platoon%3A%2F%2Forganization%2Fjoin%3Fcode%3DABC123
+```
+
+The download page validates that the nested link targets the Platoon organization join route with the same normalized code. It then shows an `Open Platoon` action while retaining the app-store fallbacks for devices that do not have the app installed.
 
 ## Local Verification
 

@@ -578,6 +578,37 @@ button:disabled {
   font-size: clamp(2.25rem, 8vw, 3.5rem);
 }
 
+.invite-handoff {
+  margin: 24px 0;
+  padding: 22px;
+  border: 1px solid #f0b8bd;
+  border-radius: var(--radius-lg);
+  background: #fff7f7;
+}
+
+.invite-handoff[hidden] {
+  display: none;
+}
+
+.invite-handoff h2 {
+  margin: 0 0 10px;
+  font-size: 1.35rem;
+}
+
+.invite-handoff p {
+  margin: 0 0 16px;
+  color: var(--muted-strong);
+}
+
+.invite-open-button {
+  width: 100%;
+}
+
+.invite-handoff .invite-handoff__note {
+  margin: 12px 0 0;
+  font-size: 0.88rem;
+}
+
 .download-options {
   display: flex;
   flex-wrap: wrap;

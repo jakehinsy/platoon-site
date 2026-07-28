@@ -6,12 +6,12 @@
   <title>Get the Platoon App</title>
   <meta
     name="description"
-    content="Download Platoon to access your schedule, trades, messages, union updates, documents, and more."
+    content="Download Platoon to access your schedule, trades, chats, union updates, documents, and more."
   >
   <meta property="og:title" content="Get the Platoon App">
   <meta
     property="og:description"
-    content="Download Platoon to access your schedule, trades, messages, union updates, documents, and more."
+    content="Download Platoon to access your schedule, trades, chats, union updates, documents, and more."
   >
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://platoonapp.com/download">
@@ -48,8 +48,23 @@
         <div class="support-card__content download-content">
           <h1 id="download-title">Get the Platoon App</h1>
           <p class="support-copy">
-            Download Platoon to access your schedule, trades, messages, union updates, documents, and more.
+            Download Platoon to access your schedule, trades, chats, union updates, documents, and more.
           </p>
+
+          <section class="invite-handoff" data-invite-handoff hidden aria-labelledby="invite-title">
+            <p class="eyebrow">Organization invite</p>
+            <h2 id="invite-title">Your Platoon invite is ready</h2>
+            <p>
+              Open Platoon to continue with join code
+              <strong data-invite-code></strong>.
+            </p>
+            <a class="button button--primary invite-open-button" data-open-platoon href="#">
+              Open Platoon
+            </a>
+            <p class="invite-handoff__note" data-invite-status>
+              If Platoon is not installed yet, download it below. This page keeps your join code ready.
+            </p>
+          </section>
 
           <div class="download-options" data-platform="unknown" aria-label="Download Platoon app">
             <a
@@ -93,9 +108,54 @@
   <script>
     (function () {
       var options = document.querySelector(".download-options");
+      var query = new URLSearchParams(window.location.search);
+      var rawInviteCode = query.get("organizationJoinCode") || "";
+      var inviteCode = rawInviteCode.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      var inviteHandoff = document.querySelector("[data-invite-handoff]");
+      var inviteCodeLabel = document.querySelector("[data-invite-code]");
+      var openPlatoonLink = document.querySelector("[data-open-platoon]");
+      var inviteStatus = document.querySelector("[data-invite-status]");
 
       if (!options) {
         return;
+      }
+
+      if (inviteCode && inviteHandoff && inviteCodeLabel && openPlatoonLink) {
+        var requestedDeepLink = query.get("deepLink") || "";
+        var deepLink = "";
+
+        try {
+          var parsedDeepLink = new URL(requestedDeepLink);
+          var parsedDeepLinkCode = (parsedDeepLink.searchParams.get("code") || "")
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, "");
+          if (
+            parsedDeepLink.protocol === "platoon:" &&
+            parsedDeepLink.hostname === "organization" &&
+            parsedDeepLink.pathname === "/join" &&
+            parsedDeepLinkCode === inviteCode
+          ) {
+            deepLink = parsedDeepLink.toString();
+          }
+        } catch (_error) {
+          // Rebuild a safe app link below.
+        }
+
+        if (!deepLink) {
+          deepLink = "platoon://organization/join?code=" + encodeURIComponent(inviteCode);
+        }
+
+        inviteHandoff.hidden = false;
+        inviteCodeLabel.textContent = inviteCode;
+        openPlatoonLink.href = deepLink;
+        openPlatoonLink.addEventListener("click", function () {
+          if (inviteStatus) {
+            window.setTimeout(function () {
+              inviteStatus.textContent =
+                "If Platoon did not open, install or update it below, then return to this page and tap Open Platoon again.";
+            }, 900);
+          }
+        });
       }
 
       var userAgent = navigator.userAgent || "";
