@@ -1612,7 +1612,7 @@ button:disabled {
 .marketing-hero__copy {
   position: relative;
   z-index: 3;
-  width: min(55%, 670px);
+  width: min(46%, 560px);
   padding: 92px 0 84px;
 }
 
@@ -1634,7 +1634,7 @@ button:disabled {
 }
 
 .marketing-hero__lede {
-  max-width: 61ch;
+  max-width: 48ch;
   margin-bottom: 32px;
   color: #dce2e7;
   font-size: 1.08rem;
@@ -2256,12 +2256,29 @@ button:disabled {
   }
 
   .marketing-hero__copy {
-    width: min(64%, 580px);
+    width: 100%;
+    padding: 52px 0 0;
   }
 
   .marketing-hero__product {
-    right: -190px;
-    width: 78vw;
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    height: 360px;
+    margin-top: 24px;
+  }
+
+  .marketing-hero__dashboard {
+    right: -20px;
+    bottom: 14px;
+    width: 92%;
+  }
+
+  .marketing-hero__phone {
+    right: 30px;
+    bottom: 0;
+    width: 125px;
   }
 
   .organization-home__grid,
