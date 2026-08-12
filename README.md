@@ -48,15 +48,15 @@ To replace a help screenshot, export the mobile app screenshot as a PNG with the
 - `styles.css` contains the shared visual system, marketing sections, mock product components, and utility-page styles.
 - `assets/images/platoon-logo.png` and `assets/images/favicon.png` are reused across the homepage and utility pages.
 
-The homepage positions Platoon as mobile-first software for firefighter unions and union leadership. It includes:
-- A clean white product-led hero.
-- Member and union leadership value sections.
-- Editable HTML/CSS product mockups using fake data only:
-  - mobile calendar view
-  - mobile union home / feature hub
-  - admin dashboard overview
-- A feature grid covering calendars, events, announcements, messaging, email, SMS, polls, official voting, recommendations, documents, audience groups, and shift trading.
-- The existing Formspree early-access form action.
+The homepage positions Platoon as the operating home for fire-service organizations, including departments, unions, associations, and training organizations. It includes:
+- An outcome-led hero using real mobile and administrative product screenshots.
+- A problem-to-outcome story centered on replacing scattered communication and records with one organization home.
+- Paired member-app and administrative-workspace sections.
+- Three grouped workflow pillars for communication, events and schedules, and membership and knowledge.
+- Organization-fit messaging and a focused capability summary.
+- A qualified Formspree inquiry form for direct fit conversations.
+
+The Help hub keeps its quick-start and visual guides. Its deeper guided-walkthrough area is currently presented as Coming Soon while those tours are rebuilt to match the current app.
 
 ## Public Routes
 
