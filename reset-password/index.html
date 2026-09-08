@@ -6,7 +6,7 @@
   <title>Reset Your Password | Platoon</title>
   <meta
     name="description"
-    content="Reset your Platoon password securely and return to the app."
+    content="Reset your Platoon password securely and sign in."
   >
   <meta name="robots" content="noindex, nofollow">
   <meta name="platoon-supabase-url" content="https://baugcxlhxcyszqoetxfq.supabase.co">
@@ -59,7 +59,7 @@
         <div class="reset-state" id="ready-state" hidden>
           <h1>Create a new password</h1>
           <p class="reset-copy">
-            Choose a strong password for your Platoon account, then return to the app.
+            Choose a strong password for your Platoon account.
           </p>
 
           <form id="reset-form" class="reset-form" novalidate>
@@ -94,7 +94,8 @@
               <button type="submit" class="button button--primary" id="submit-button">
                 Update Password
               </button>
-              <a class="button button--secondary" href="/">Cancel</a>
+              <a class="text-link" href="https://app.platoonapp.com/login">Member sign in</a>
+              <a class="text-link" href="https://admin.platoonapp.com/login">Admin sign in</a>
             </div>
           </form>
         </div>
@@ -105,8 +106,9 @@
             You can return to Platoon and sign in with your new password now.
           </p>
           <div class="reset-actions">
-            <a class="button button--primary" href="platoon://">Open Platoon App</a>
-            <a class="text-link" href="/">Back to sign in</a>
+            <a class="button button--primary" href="https://app.platoonapp.com/login">Member sign in</a>
+            <a class="button button--secondary" href="https://admin.platoonapp.com/login">Admin sign in</a>
+            <a class="text-link" href="platoon://">Open Platoon App</a>
           </div>
         </div>
 
@@ -116,7 +118,8 @@
             This password reset link is invalid or has expired. Request a new reset email and try again.
           </p>
           <div class="reset-actions">
-            <a class="button button--secondary" href="/">Back to sign in</a>
+            <a class="button button--secondary" href="https://app.platoonapp.com/login">Member sign in</a>
+            <a class="button button--secondary" href="https://admin.platoonapp.com/login">Admin sign in</a>
             <a class="text-link" href="mailto:support@platoonapp.com">Contact support</a>
           </div>
         </div>
