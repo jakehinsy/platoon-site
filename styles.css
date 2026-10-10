@@ -1493,6 +1493,7 @@ button:disabled {
 }
 
 .marketing-header .brand-link {
+  flex-shrink: 0;
   gap: 10px;
   color: var(--marketing-ink);
 }
@@ -1507,6 +1508,7 @@ button:disabled {
 }
 
 .marketing-nav {
+  margin-left: auto;
   align-items: center;
   gap: 8px 24px;
 }
@@ -1521,19 +1523,17 @@ button:disabled {
   border-left: 1px solid #d7dde2;
 }
 
-.marketing-nav .marketing-nav__cta {
-  min-height: 42px;
+.marketing-app-entry {
+  flex-shrink: 0;
+  width: auto;
+  min-height: 44px;
   padding: 0 16px;
-  color: #ffffff;
-}
-
-.marketing-nav .marketing-nav__cta:hover,
-.marketing-nav .marketing-nav__cta:focus-visible {
-  color: #ffffff;
+  white-space: nowrap;
 }
 
 .mobile-nav {
   display: none;
+  flex-shrink: 0;
   position: relative;
 }
 
@@ -1644,6 +1644,28 @@ button:disabled {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.marketing-hero__app-entry {
+  margin: 22px 0 0;
+  color: #dce2e7;
+  font-size: 0.94rem;
+}
+
+.marketing-hero__app-entry a {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  min-height: 44px;
+  color: #ffffff;
+  font-weight: 800;
+  text-underline-offset: 4px;
+}
+
+.marketing-app-entry:focus-visible,
+.marketing-hero__app-entry a:focus-visible {
+  outline: 3px solid #ff9997;
+  outline-offset: 3px;
 }
 
 .button--large {
@@ -2255,6 +2277,10 @@ button:disabled {
     display: block;
   }
 
+  .marketing-app-entry {
+    margin-left: auto;
+  }
+
   .marketing-hero__copy {
     width: 100%;
     padding: 52px 0 0;
@@ -2359,6 +2385,16 @@ button:disabled {
     flex-direction: row;
     align-items: center;
     padding: 10px 0;
+    gap: 10px;
+  }
+
+  .marketing-header .marketing-brand-name {
+    display: none;
+  }
+
+  .marketing-app-entry {
+    padding: 0 12px;
+    font-size: 0.8rem;
   }
 
   .marketing-header .brand-lockup__logo {
